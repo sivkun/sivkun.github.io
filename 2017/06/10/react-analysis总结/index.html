@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="react,源码，框架," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="sivkun" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="① http://blog.csdn.net/u013510838/article/details/55669742② https://purplebamboo.github.io/2015/09/15/reactjs_source_analyze_part_one/③ https://zhuanlan.zhihu.com/p/20346379?columnSlug=purerender首先贴出">
+<meta name="keywords" content="react,源码，框架">
+<meta property="og:type" content="article">
+<meta property="og:title" content="react-analysis总结">
+<meta property="og:url" content="http://fsysfq.top/2017/06/10/react-analysis总结/index.html">
+<meta property="og:site_name" content="sivkun">
+<meta property="og:description" content="① http://blog.csdn.net/u013510838/article/details/55669742② https://purplebamboo.github.io/2015/09/15/reactjs_source_analyze_part_one/③ https://zhuanlan.zhihu.com/p/20346379?columnSlug=purerender首先贴出">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://www.processon.com/chart_image/591304bde4b0f320c44ff26f.png">
+<meta property="og:image" content="http://www.processon.com/chart_image/5915e122e4b0ef971ac9bb85.png">
+<meta property="og:updated_time" content="2018-07-07T13:18:26.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="react-analysis总结">
+<meta name="twitter:description" content="① http://blog.csdn.net/u013510838/article/details/55669742② https://purplebamboo.github.io/2015/09/15/reactjs_source_analyze_part_one/③ https://zhuanlan.zhihu.com/p/20346379?columnSlug=purerender首先贴出">
+<meta name="twitter:image" content="http://www.processon.com/chart_image/591304bde4b0f320c44ff26f.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://fsysfq.top/2017/06/10/react-analysis总结/"/>
+
+
+
+
+
+  <title>react-analysis总结 | sivkun</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">sivkun</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">follow your heart</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://fsysfq.top/2017/06/10/react-analysis总结/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="石富全">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="sivkun">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">react-analysis总结</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-10T15:12:41+08:00">
+                2017-06-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/源码分析/" itemprop="url" rel="index">
+                    <span itemprop="name">源码分析</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/06/10/react-analysis总结/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/06/10/react-analysis总结/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>① <a href="http://blog.csdn.net/u013510838/article/details/55669742" target="_blank" rel="noopener">http://blog.csdn.net/u013510838/article/details/55669742</a><br>② <a href="https://purplebamboo.github.io/2015/09/15/reactjs_source_analyze_part_one/" target="_blank" rel="noopener">https://purplebamboo.github.io/2015/09/15/reactjs_source_analyze_part_one/</a><br>③ <a href="https://zhuanlan.zhihu.com/p/20346379?columnSlug=purerender" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/20346379?columnSlug=purerender</a><br>首先贴出我阅读源码时参考的链接。很感谢作者。<br>React源码规模十分庞大，开始阅读的时候不能直接陷进去，研究一些细节，而是要先把握整体的流程，对流程有基本了解后再沉下心仔细品味。这里推荐先去阅读上面的链接②，再去参考链接①。参考链接③讲了react  diff算法，可以参考<a href="mailto:react@0.14" target="_blank" rel="noopener">react@0.14</a>中对应的文件。</p>
+</blockquote>
+<p>​    建议看React@15的源码。我一开始阅读源码的时候，把React源码clone了下来，版本比较高在16.0.0-alpha.3以后，源码中没有使用相对路径，用的所谓的全局模块系统，都找不到北。后来就找教程，参考如何阅读。后来就找到了上面两个，也并没有提什么全局模块系统。后来根据参考链接①，将react版本切换到了<a href="mailto:React@16.0.0-alpha.3" target="_blank" rel="noopener">React@16.0.0-alpha.3</a>。然后就看是研究源代码了。只看代码并不直观，需要配合调试，才能更好地理解。使用官方提供的<code>create-react-app</code>脚手架，进行编码测试。后来发现默认使用的是<a href="mailto:React@15.5.4" target="_blank" rel="noopener">React@15.5.4</a>，不过16里面也有对应代码，并且我已经添加了好多注释，并不影响阅读，也就没有再切换版本，当看到<code>ReactDOMComponent</code>为元素注册事件的时候，就看不下去了，乖乖的直接看测试项目下的<code>node_modules</code>中的<code>react</code>和<code>react-dom</code>模块去了。</p>
+<p>​    React@16这个版本，其实发生了很大的变化，React将要发布fiber特性。React fiber对以前React的核心算法做了全新的改版。不过<a href="mailto:React@16.0.0-alpha.3" target="_blank" rel="noopener">React@16.0.0-alpha.3</a>代码库中，以前的模块还都存在，可以阅读研究。</p>
+<a id="more"></a>
+<p>​    阅读React源码，首先对React源码中的基本概念有充分的理解。我想既然想研究React源码，肯定对已经对React有了充分的认识。如果有不明白的地方，<a href="https://facebook.github.io/react/docs/installation.html" target="_blank" rel="noopener">官方文档</a>是很好的资源。</p>
+<h1 id="关键方法"><a href="#关键方法" class="headerlink" title="关键方法"></a>关键方法</h1><p>在代码中加debugger，console.log。在浏览器控制台调试。可以加在自己写的文件中，也可以加在<code>node_modules</code>中的<code>react</code>和<code>react-dom</code>模块源码中。</p>
+<h1 id="React中的基本概念"><a href="#React中的基本概念" class="headerlink" title="React中的基本概念"></a>React中的基本概念</h1><ol>
+<li><code>React Component</code>：用户自定义组件，以前是通过<code>React.createClass</code>创建自定义组件,现在es6语法是通过class 继承的语法创建自定义组件，自组件中可以定义生命周期函数等，自定义组件只是一个类或者说是一个构造函数，可以在JSX中声明式的使用，如<code>&lt;div&gt;&lt;MyConponent1/&gt;&lt;MyComponent2/&gt;&lt;/div&gt;</code>，这时并没有对自定义组件进行实例化。</li>
+<li><code>ReactElement</code>：<code>ReactElement</code>是React对用户自定义组件和原生DOM的一个抽象元素，就像原生DOM元素（div、span）一样可以构成DOM树，通过<code>ReactElement</code>之间的组合抽象形成<code>Virtual DOM</code>树。无论是DOM元素还是用户自定义组件都会被转化为ReactElement。</li>
+</ol>
+<p>React以JSX形式书写，是要经过babel转义处理的。可以在<a href="http://babeljs.cn/repl/或者http://babeljs.io/这两个网站，进行观察测试。" target="_blank" rel="noopener">http://babeljs.cn/repl/或者http://babeljs.io/这两个网站，进行观察测试。</a></p>
+<p>上面只是概念，并不直观，可以自己测试，在控制台中将React中的重要的数据结构打印出来。<code>var result=ReactDOM.render(&lt;App/&gt;,...)</code>调用返回结果result是自定义组件App的实例化对象。在阅读源码的过程中，可以进行参考理解。可以看看React内部是如何表达<code>Virtual DOM</code>的树形结构的。</p>
+<p>昨天在掘金看到的一篇文章<a href="https://juejin.im/entry/592ea028a22b9d0057753349" target="_blank" rel="noopener">图解 React Virtual DOM</a>对理解<code>Virtual DOM</code>会有些帮助。</p>
+<h1 id="React源码中关键词汇"><a href="#React源码中关键词汇" class="headerlink" title="React源码中关键词汇"></a>React源码中关键词汇</h1><ol>
+<li><p><code>reconsiler</code>:调度者或者调和着，reconciliation（n. 和解；调和；和谐；甘愿） algorithm：可以理解为调度算法</p>
+</li>
+<li><p><code>publicInstance</code>：用户自定义组件实例化组件。</p>
+</li>
+<li><code>internalInstance</code>：ReactElement对应的内部实例，也可以说是用户自定义组件对应的内部实例。内部实例是<code>ReactCompositeComponent</code>、<code>ReactDOMComponent</code>等实例化对象。</li>
+</ol>
+<p><code>publicInstance</code>和<code>internalInstance</code>这两个对象是相互引用的。</p>
+<p><code>App</code>实例就是<code>publicInstance</code>，<code>_reactInternalInstance</code>就是<code>App</code>引用的内部实例。</p>
+<p><code>_reactInternalInstance</code>有个<code>_instance</code>属性，是对<code>App</code>实例的引用。</p>
+<ol start="4">
+<li><p><code>context</code><br><code>contextType</code>:设置该属性的组件，则在该组件内部可以通过this.context获取到contex。<br><code>childContextTypes</code>:设置该属性的组件，可以设置向下传递context对象的属性的类型。<br><code>getChildContext()</code>：该函数设置可以向下传递的context对象属性。必须要在childContextTypes设置属性类型。<br>特点：只要在一个组件设置了context，则在其后代组件中都可以获取到。<br>​       如果后代组件也设置了context，向下传递的context是<code>Object.assign({}, currentContext, childContext);</code><br>​       <code>currentContext</code>:是从父组件传下来的Context（unmaskedContext）。<br>​       <code>childContext</code>:是当前组件设置的childContext。<br>当前组件对应的<code>internalInstance._context=currentContent</code><br>当前组件<code>publicInstance</code>只能根据<code>contextType</code>，从<code>currentContext</code>生成对应的<code>context</code>。</p>
+</li>
+<li><p><code>Transaction</code>：事务</p>
+<p>React中挂载、更新等都是以事务形式进行。可以理解为：一个操作如果以事务形式执行，那么可以在这个操作执行前进行一些初始化工作（initial阶段），在操作执行后进行一些擦屁股操作（close阶段）。具体实现看源码。</p>
+</li>
+</ol>
+<h1 id="React-Mount阶段"><a href="#React-Mount阶段" class="headerlink" title="React Mount阶段"></a>React Mount阶段</h1><p>大致流程：</p>
+<ol>
+<li>判断是否已经执行过ReactDOM.render()，如果是进行更新操作。否则执行3</li>
+<li>判断是否是服务器端渲染，如果是进行标记。执行3</li>
+<li>执行新组件的挂载操作。实例化组件，初始化批量挂载组件环境。 <code>ReactUpdates.batchedUpdates</code>,作用是：以事务形式进行，挂载操作，如果有setState类似更新组件操作，在close阶段进行事后处理。</li>
+<li>将调度挂载阶段事务化。  <code>ReactReconcileTransaction</code> 即 ReactReconcile事务：显然，是将ReactReconcile这一过程的事务化。作用：①维护一个callback对列，在挂载完成后在事务的close阶段调用。当然还有其它作用。</li>
+<li>递归挂载组件返回markup。 <code>ReactReconciler.mountComponent</code>顾名思义 React调和 挂载组件 ，调和的过程是React思想的精髓。diff过程融入其中。参见：<a href="https://facebook.github.io/react/docs/reconciliation.html" target="_blank" rel="noopener">reconciliation</a></li>
+<li>并将markup插入container。这一步中，如果是服务器端渲染，进行校验和判断。</li>
+<li>执行 <code>ReactReconcileTransaction</code>的close阶段。</li>
+<li>执行 <code>ReactUpdates.batchedUpdates</code>的close阶段。</li>
+</ol>
+<p>这是我开始研究源码时，在<a href="https://www.processon.com上画的图，" target="_blank" rel="noopener">https://www.processon.com上画的图，</a><br><img src="http://www.processon.com/chart_image/591304bde4b0f320c44ff26f.png" alt="ReactMount阶段分析过程图"><br>很是庞大，操作很复杂，不画图的话会跳晕的。当中可能有些不准确的地方。</p>
+<p>还有实例化ReactComponent的过程，还有React组件的树形结构。如图</p>
+<p><img src="http://www.processon.com/chart_image/5915e122e4b0ef971ac9bb85.png" alt="InstantiateReactComponent"></p>
+<h1 id="React-updating阶段"><a href="#React-updating阶段" class="headerlink" title="React updating阶段"></a>React updating阶段</h1><p>可以结合一开始给出的参考链接①③阅读源码。还有总结里面给出的连接可以参考。</p>
+<h1 id="React的合成事件"><a href="#React的合成事件" class="headerlink" title="React的合成事件"></a>React的合成事件</h1><p>React实现了一套复杂的事件系统。可以结合一开始给出的参考链接①阅读源码。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>React源码很复杂，我也只是有了个大概的理解，还没能从更高的层次去理解其设计的原理及原因。</p>
+<p>添加注释的代码参考<a href="https://github.com/sivkun/react-analysis" target="_blank" rel="noopener">https://github.com/sivkun/react-analysis</a>  </p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/react/" rel="tag"># react</a>
+          
+            <a href="/tags/源码，框架/" rel="tag"># 源码，框架</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/04/节流器throttle/" rel="next" title="节流模式">
+                <i class="fa fa-chevron-left"></i> 节流模式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/06/17/react-router-analysis/" rel="prev" title="react-router-analysis">
+                react-router-analysis <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div class="ds-thread" data-thread-key="2017/06/10/react-analysis总结/"
+           data-title="react-analysis总结" data-url="http://fsysfq.top/2017/06/10/react-analysis总结/">
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">石富全</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">26</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/sivkun" target="_blank" title="myGitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>myGitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://fex.baidu.com" target="_blank" title="百度FEX">
+                      
+                        <i class="fa fa-fw fa-fex.baidu"></i>百度FEX</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://taobaofed.org" target="_blank" title="淘宝FED">
+                      
+                        <i class="fa fa-fw fa-taobaofed"></i>淘宝FED</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://www.alloyteam.com/" target="_blank" title="alloyteam">
+                      
+                        <i class="fa fa-fw fa-alloyteam"></i>alloyteam</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://www.cnblogs.com/sivkun/" target="_blank" title="我的博客园">
+                      
+                        <i class="fa fa-fw fa-cnblogs"></i>我的博客园</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#关键方法"><span class="nav-number">1.</span> <span class="nav-text">关键方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#React中的基本概念"><span class="nav-number">2.</span> <span class="nav-text">React中的基本概念</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#React源码中关键词汇"><span class="nav-number">3.</span> <span class="nav-text">React源码中关键词汇</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#React-Mount阶段"><span class="nav-number">4.</span> <span class="nav-text">React Mount阶段</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#React-updating阶段"><span class="nav-number">5.</span> <span class="nav-text">React updating阶段</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#React的合成事件"><span class="nav-number">6.</span> <span class="nav-text">React的合成事件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">7.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">石富全</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"discussinfo"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="HTML,CSS,Markdown," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="sivkun" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="响应式网站设计本文是在学习responsive-web-design时，做的笔记。响应式网站设计的优点 减少工作量  网站、设计、代码、内容都只需要一份  多出来的工作量只是js脚本、css样式做一些改动 节省时间 每个设备都能得到正确的设计 搜索优化  响应式网站设计的缺点 会加载更多的样式和脚本资源 设计比较难精准定位和控制 老版本浏览器兼容不好  CSS3 媒体属性简介 略viewport视">
+<meta name="keywords" content="HTML,CSS,Markdown">
+<meta property="og:type" content="article">
+<meta property="og:title" content="responsive web design 笔记 ">
+<meta property="og:url" content="http://fsysfq.top/2017/03/04/responsive-web-design-笔记/index.html">
+<meta property="og:site_name" content="sivkun">
+<meta property="og:description" content="响应式网站设计本文是在学习responsive-web-design时，做的笔记。响应式网站设计的优点 减少工作量  网站、设计、代码、内容都只需要一份  多出来的工作量只是js脚本、css样式做一些改动 节省时间 每个设备都能得到正确的设计 搜索优化  响应式网站设计的缺点 会加载更多的样式和脚本资源 设计比较难精准定位和控制 老版本浏览器兼容不好  CSS3 媒体属性简介 略viewport视">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://fsysfq.top/2017/03/04/responsive-web-design-笔记/favicon.icon">
+<meta property="og:updated_time" content="2018-07-06T06:47:16.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="responsive web design 笔记 ">
+<meta name="twitter:description" content="响应式网站设计本文是在学习responsive-web-design时，做的笔记。响应式网站设计的优点 减少工作量  网站、设计、代码、内容都只需要一份  多出来的工作量只是js脚本、css样式做一些改动 节省时间 每个设备都能得到正确的设计 搜索优化  响应式网站设计的缺点 会加载更多的样式和脚本资源 设计比较难精准定位和控制 老版本浏览器兼容不好  CSS3 媒体属性简介 略viewport视">
+<meta name="twitter:image" content="http://fsysfq.top/2017/03/04/responsive-web-design-笔记/favicon.icon">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://fsysfq.top/2017/03/04/responsive-web-design-笔记/"/>
+
+
+
+
+
+  <title>responsive web design 笔记  | sivkun</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">sivkun</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">follow your heart</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://fsysfq.top/2017/03/04/responsive-web-design-笔记/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="石富全">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="sivkun">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">responsive web design 笔记 </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-04T22:06:50+08:00">
+                2017-03-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/03/04/responsive-web-design-笔记/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/04/responsive-web-design-笔记/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="响应式网站设计"><a href="#响应式网站设计" class="headerlink" title="响应式网站设计"></a>响应式网站设计</h1><h2 id="本文是在学习responsive-web-design时，做的笔记。"><a href="#本文是在学习responsive-web-design时，做的笔记。" class="headerlink" title="本文是在学习responsive-web-design时，做的笔记。"></a>本文是在学习<a href="https://github.com/sivkun/responsive-web-design" target="_blank" rel="noopener">responsive-web-design</a>时，做的笔记。</h2><h2 id="响应式网站设计的优点"><a href="#响应式网站设计的优点" class="headerlink" title="响应式网站设计的优点"></a>响应式网站设计的优点</h2><ul>
+<li>减少工作量<br>  网站、设计、代码、内容都只需要一份<br>  多出来的工作量只是js脚本、css样式做一些改动</li>
+<li>节省时间</li>
+<li>每个设备都能得到正确的设计</li>
+<li>搜索优化</li>
+</ul>
+<h2 id="响应式网站设计的缺点"><a href="#响应式网站设计的缺点" class="headerlink" title="响应式网站设计的缺点"></a>响应式网站设计的缺点</h2><ul>
+<li>会加载更多的样式和脚本资源</li>
+<li>设计比较难精准定位和控制</li>
+<li>老版本浏览器兼容不好</li>
+</ul>
+<h2 id="CSS3-媒体属性简介-略"><a href="#CSS3-媒体属性简介-略" class="headerlink" title="CSS3 媒体属性简介 略"></a>CSS3 媒体属性简介 略</h2><h2 id="viewport视口"><a href="#viewport视口" class="headerlink" title="viewport视口"></a>viewport视口</h2><p><code>布局视口（layout viewport）</code>: 虚拟的视口将页面呈现出来，布局视口的宽度是不变的。<br><code>可视视口（visual viewport）</code>:  对布局视口呈现出来的页面进行放大或者缩小，在固定的设备显示器看到的网页的内容区域的内容范围或大或小。<br> 比方说：320px宽的显示屏，网页宽度为960px，在显示屏中显示这个网页，渲染时会按照网页960px的宽度进行渲染，然后将整个页面缩放三分之一，<br> 这样整个页面显示出来，此时可视视口为960px因为整个页面你都看到了，即布局视口宽度等于可视视口宽度。将页面放大，在320px的设备中，<br> 只会看到页面的一部分，可视视口变小。可视视口尺寸不固定，随着用户缩放页面改变。 （默认宽度是屏幕的宽度）<br> 像是拿着放大镜看书，书是布局视口，通过放大镜看到的是可视视口，随着放大镜离书的远近，可视视口改变，左右移动放大镜，可看到整个书的内容。<br> 这样的话用户浏览网页时，需要不断的滑动、放大页面，很不方便。<br><code>理想视口（ideal viewport）</code>：布局视口在一个设备上的最佳尺寸。理想视口下的页面便于浏览器浏览阅读。<br>  理想视口就是为了构架手机浏览器优化的页面而添加的<br><a id="more"></a><br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width"</span>/&gt;</span> <span class="comment">&lt;!--告诉设备要使用理想视口，该宽度等于屏幕的宽度。--&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>如果不指定上面属性，布局视口的宽度是设备厂商的默认值，指定该属性布局视口成为理想视口。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width,minimum-scale=1.0,maximum=1.0,user-scaleable=no"</span>/&gt;</span></span><br><span class="line"><span class="comment">&lt;!--最小缩放比例、最大缩放比例、 禁止缩放--&gt;</span></span><br></pre></td></tr></table></figure>
+<p>渐进增强<br>优雅降级（推荐）</p>
+<h2 id="响应式网站设计实践原则"><a href="#响应式网站设计实践原则" class="headerlink" title="响应式网站设计实践原则"></a>响应式网站设计实践原则</h2><ul>
+<li>断点选择<br>例如：<br>0~480 小屏幕<br>481~800 中屏幕<br>801~1400 大屏幕<br>1400+ 巨屏幕</li>
+</ul>
+<h2 id="如何组织项目目录结构"><a href="#如何组织项目目录结构" class="headerlink" title="如何组织项目目录结构"></a>如何组织项目目录结构</h2><ul>
+<li>约定优于配置（convention over configuration）<br>约定代码结构或命名规范减少配置数量<br>css vs style<br>img vs image<br>image vs images</li>
+</ul>
+<h2 id="markdown语法"><a href="#markdown语法" class="headerlink" title="markdown语法"></a>markdown语法</h2><p>dillinger.io 在线md编辑器<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&gt; 引用名言</span><br><span class="line"></span><br><span class="line">[百度](http://www.baidu.com)</span><br><span class="line"></span><br><span class="line">![图片](src/favicon.icon)</span><br><span class="line"></span><br><span class="line">**粗体** *斜体* ***粗体加斜体***</span><br><span class="line"></span><br><span class="line">表格</span><br><span class="line"></span><br><span class="line">|col1|col2|col3|</span><br><span class="line">|---:|:---:|:---|</span><br><span class="line">|col11111|col2dddddd|col333333|</span><br><span class="line">|col1|col2|col3|</span><br></pre></td></tr></table></figure></p>
+<p>效果如下：</p>
+<hr>
+<blockquote>
+<p>引用名言</p>
+</blockquote>
+<p><a href="http://www.baidu.com" target="_blank" rel="noopener">百度</a></p>
+<p><img src="/2017/03/04/responsive-web-design-笔记/favicon.icon" alt="图片"></p>
+<p><strong>粗体</strong> <em>斜体</em> <strong><em>粗体加斜体</em></strong></p>
+<p>表格</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:right">col1</th>
+<th style="text-align:center">col2</th>
+<th style="text-align:left">col3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right">col11111</td>
+<td style="text-align:center">col2dddddd</td>
+<td style="text-align:left">col333333</td>
+</tr>
+<tr>
+<td style="text-align:right">col1</td>
+<td style="text-align:center">col2</td>
+<td style="text-align:left">col3</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="html5标签"><a href="#html5标签" class="headerlink" title="html5标签"></a>html5标签</h2><p><code>&lt;article&gt;</code>标签是<code>&lt;section&gt;</code>标签的子集。<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">b</span>&gt;</span><span class="tag">&lt;/<span class="name">b</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">em</span>&gt;</span><span class="tag">&lt;/<span class="name">em</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">i</span>&gt;</span><span class="tag">&lt;/<span class="name">i</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>在网页中，一些必不可少的图片使用<code>&lt;img&gt;</code>引入，可有可无的装饰性图片可以用标签的style引入。</li>
+</ul>
+<h2 id="px-em-rem"><a href="#px-em-rem" class="headerlink" title="px em rem"></a>px em rem</h2><ul>
+<li>px 1个px相当于1个像素</li>
+<li>em 相对长度单位<ol>
+<li>em相对参照物为父元素的font-size</li>
+<li>em 具有继承的特点</li>
+<li>当没有设置font-size时，浏览器会有一个默认的em设置：1em=16px</li>
+</ol>
+<ul>
+<li>em 的缺点：容易混乱</li>
+</ul>
+</li>
+<li>rem<ol>
+<li>rem的相对参照物为根元素html，相对于参照固定不变，所以较好计算</li>
+<li>当没有设置font-size时，浏览器会有一个默认的rem设置：1rem=16px,这点与em是一致的<br>font-size:62.5% 1rem=10px (10/16*100%)<br>font-size:100% 1rem = 16px </li>
+</ol>
+</li>
+</ul>
+<h2 id="清除浮动-预防高度塌陷"><a href="#清除浮动-预防高度塌陷" class="headerlink" title="清除浮动,预防高度塌陷"></a>清除浮动,预防高度塌陷</h2><ol>
+<li>加标签： <code>&lt;div style=&quot;clear:both&quot;&gt;&lt;/div&gt;</code></li>
+<li>浮动容器加 <code>overflow:auto</code></li>
+<li>包裹容器加 <code>float</code></li>
+<li>包裹容器加after伪元素设置css<code>clear:both</code></li>
+</ol>
+<h2 id="BFC"><a href="#BFC" class="headerlink" title="BFC:"></a>BFC:</h2><p>相关内容一大堆 </p>
+<blockquote>
+<p><a href="http://www.cnblogs.com/lhb25/p/inside-block-formatting-ontext.html" target="_blank" rel="noopener">http://www.cnblogs.com/lhb25/p/inside-block-formatting-ontext.html</a><br><a href="http://www.zhangxinxu.com/wordpress/2015/02/css-deep-understand-flow-bfc-column-two-auto-layout/" target="_blank" rel="noopener">http://www.zhangxinxu.com/wordpress/2015/02/css-deep-understand-flow-bfc-column-two-auto-layout/</a><br><a href="http://web.jobbole.com/84808/" target="_blank" rel="noopener">http://web.jobbole.com/84808/</a></p>
+</blockquote>
+<p>在解释 BFC 是什么之前，需要先介绍 Box、Formatting Context的概念。  </p>
+<ul>
+<li>Box: CSS布局的基本单位<br>　　Box 是 CSS 布局的对象和基本单位， 直观点来说，就是一个页面是由很多个 Box 组成的。元素的类型和 display 属性，决定了这个 Box 的类型。 不同类型的 Box， 会参与不同的 Formatting Context（一个决定如何渲染文档的容器），因此Box内的元素会以不同的方式渲染。让我们看看有哪些盒子：<br>block-level box:display 属性为 block, list-item, table 的元素，会生成 block-level box。并且参与 block fomatting context；<br>inline-level box:display 属性为 inline, inline-block, inline-table 的元素，会生成 inline-level box。并且参与 inline formatting context；<br>run-in box: css3 中才有， 这儿先不讲了。</li>
+<li>Formatting context<br>　　Formatting context 是 W3C CSS2.1 规范中的一个概念。它是页面中的一块渲染区域，并且有一套渲染规则，它决定了其子元素将如何定位，以及和其他元素的关系和相互作用。最常见的 Formatting context 有 Block fomatting context (简称BFC)和 Inline formatting context (简称IFC)。</li>
+<li>BFC(Block formatting context)直译为”块级格式化上下文”。<br>它是一个独立的渲染区域，只有Block-level box参与， 它规定了内部的Block-level Box如何布局，并且与这个区域外部毫不相干。</li>
+</ul>
+<p><code>BFC有三个特性</code></p>
+<ul>
+<li><p>BFC会阻止垂直外边距（margin-top、margin-bottom）折叠</p>
+<p>  按照BFC的定义，只有同属于一个BFC时，两个元素才有可能发生垂直Margin的重叠，这个包括相邻元素，嵌套元素，只要他们之间没有阻挡(例如边框，非空内容，padding等)就会发生margin重叠。<br>因此要解决margin重叠问题，只要让它们不在同一个BFC就行了，但是对于两个相邻元素来说，意义不大，没有必要给它们加个外壳，但是对于嵌套元素来说就很有必要了，只要把父元素设为BFC就可以了。这样子元素的margin就不会和父元素的margin发生重叠了。</p>
+</li>
+<li><p>BFC不会重叠浮动元素</p>
+</li>
+<li>BFC可以包含浮动</li>
+</ul>
+<p>我们可以利用BFC的第三条特性来“清浮动”，这里其实说清浮动已经不再合适，应该说包含浮动。<br>也就是说只要父容器形成BFC就可以，简单看看如何形成BFC</p>
+<ol>
+<li>float为 left|right</li>
+<li>overflow为 hidden|auto|scroll</li>
+<li>display为 table-cell|table-caption|inline-block</li>
+<li>position为 absolute|fixed</li>
+<li>我们可以对父容器添加这些属性来形成BFC达到“清浮动”效果</li>
+</ol>
+<p>flex布局</p>
+<h2 id="导航栏的问题每一个标签之间出现空隙"><a href="#导航栏的问题每一个标签之间出现空隙" class="headerlink" title="导航栏的问题每一个标签之间出现空隙"></a>导航栏的问题每一个标签之间出现空隙</h2><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"> <span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"#"</span>&gt;</span>登录<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"#"</span>&gt;</span>快速登录<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"#"</span>&gt;</span>关于<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"#"</span>&gt;</span>帮助<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"#"</span>&gt;</span>APP下载<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p> 解决方法：</p>
+<ol>
+<li><code>&lt;li&gt;</code>标签不换行</li>
+<li><code>&lt;li&gt;</code>标签不闭合</li>
+<li>设置<code>&lt;ul&gt;</code>字体font-size：0,内部<code>&lt;li&gt;</code>设置font-size；</li>
+<li>设置<code>li+li{margin-left: -3px;}</code>负边距。</li>
+<li>css4属性中有white-space-collapsing<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"> <span class="selector-class">.notice</span> <span class="selector-tag">a</span><span class="selector-pseudo">:first-child</span><span class="selector-pseudo">:before</span> &#123;</span><br><span class="line">    <span class="attribute">content</span>: <span class="string">'最新公告：\00a0\00a0'</span>; <span class="comment">/*\00a0空白字符*/</span></span><br><span class="line">    <span class="attribute">color</span>: <span class="number">#aaa</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p><code>伪元素</code><br>与伪类针对特殊状态的元素不同的是，伪元素是对元素中的特定内容进行操作，它所操作的层次比伪类更深了一层，也因此它的动态性比伪类要低得多。实际上，设计伪元素的目的就是去选取诸如元素内容第一个字（母）、第一行，选取某些内容前面或后面这种普通的选择器无法完成的工作。它控制的内容实际上和元素是相同的，但是它本身只是基于元素的抽象，并不存在于文档中，所以叫伪元素。</p>
+<p> <code>伪类</code><br>伪类选择元素基于的是当前元素处于的状态，或者说元素当前所具有的特性，而不是元素的id、class、属性等静态的标志。由于状态是动态变化的，所以一个元素达到一个特定状态时，它可能得到一个伪类的样式；当状态改变时，它又会失去这个样式。由此可以看出，它的功能和class有些类似，但它是基于文档之外的抽象，所以叫伪类。</p>
+<p>webp<br>svg<br>png<br>jpg<br><code>响应式图片</code>方式<br>js或服务器<br>srcset<br>srcset配合sizes<br>picture<br>svg  【illustrator】</p>
+<p>picturefill库</p>
+<p>npm<br>^1.7.4 (大中小)  大   相同<br>~1.7.4          大中 相同  </p>
+<p><code>处理兼容性</code></p>
+<p><code>同步测试工具</code>browser-sync<br><code>browser-sync start --server &quot;src&quot;  --file &quot;src&quot;</code></p>
+<p>自动化构建工具 1、Grunt 2、gulp<br>静态资源打包工具 1、webpack</p>
+<p>原型设计<br>axure<br>sketch</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/HTML/" rel="tag"># HTML</a>
+          
+            <a href="/tags/CSS/" rel="tag"># CSS</a>
+          
+            <a href="/tags/Markdown/" rel="tag"># Markdown</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/11/24/My-New-Post/" rel="next" title="My New Post">
+                <i class="fa fa-chevron-left"></i> My New Post
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/04/react-tips/" rel="prev" title="react tips">
+                react tips <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div class="ds-thread" data-thread-key="2017/03/04/responsive-web-design-笔记/"
+           data-title="responsive web design 笔记 " data-url="http://fsysfq.top/2017/03/04/responsive-web-design-笔记/">
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">石富全</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">26</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/sivkun" target="_blank" title="myGitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>myGitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://fex.baidu.com" target="_blank" title="百度FEX">
+                      
+                        <i class="fa fa-fw fa-fex.baidu"></i>百度FEX</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://taobaofed.org" target="_blank" title="淘宝FED">
+                      
+                        <i class="fa fa-fw fa-taobaofed"></i>淘宝FED</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://www.alloyteam.com/" target="_blank" title="alloyteam">
+                      
+                        <i class="fa fa-fw fa-alloyteam"></i>alloyteam</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://www.cnblogs.com/sivkun/" target="_blank" title="我的博客园">
+                      
+                        <i class="fa fa-fw fa-cnblogs"></i>我的博客园</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#响应式网站设计"><span class="nav-number">1.</span> <span class="nav-text">响应式网站设计</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#本文是在学习responsive-web-design时，做的笔记。"><span class="nav-number">1.1.</span> <span class="nav-text">本文是在学习responsive-web-design时，做的笔记。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#响应式网站设计的优点"><span class="nav-number">1.2.</span> <span class="nav-text">响应式网站设计的优点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#响应式网站设计的缺点"><span class="nav-number">1.3.</span> <span class="nav-text">响应式网站设计的缺点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CSS3-媒体属性简介-略"><span class="nav-number">1.4.</span> <span class="nav-text">CSS3 媒体属性简介 略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#viewport视口"><span class="nav-number">1.5.</span> <span class="nav-text">viewport视口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#响应式网站设计实践原则"><span class="nav-number">1.6.</span> <span class="nav-text">响应式网站设计实践原则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何组织项目目录结构"><span class="nav-number">1.7.</span> <span class="nav-text">如何组织项目目录结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#markdown语法"><span class="nav-number">1.8.</span> <span class="nav-text">markdown语法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#html5标签"><span class="nav-number">1.9.</span> <span class="nav-text">html5标签</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#px-em-rem"><span class="nav-number">1.10.</span> <span class="nav-text">px em rem</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#清除浮动-预防高度塌陷"><span class="nav-number">1.11.</span> <span class="nav-text">清除浮动,预防高度塌陷</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BFC"><span class="nav-number">1.12.</span> <span class="nav-text">BFC:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#导航栏的问题每一个标签之间出现空隙"><span class="nav-number">1.13.</span> <span class="nav-text">导航栏的问题每一个标签之间出现空隙</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">石富全</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"discussinfo"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

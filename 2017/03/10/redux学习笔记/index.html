@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="react,redux," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="sivkun" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="Redux http://redux.js.org/?q=#入门参考：http://www.ruanyifeng.com/blog/2016/09/redux_tutorial_part_one_basic_usages.html  设计思想：  Web 应用是一个状态机，视图和状态是一一对应的。 所有的状态，保存在一个对象里面   基本概念和API StoreStore就是保存数据的地方，可以把">
+<meta name="keywords" content="react,redux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="redux学习笔记">
+<meta property="og:url" content="http://fsysfq.top/2017/03/10/redux学习笔记/index.html">
+<meta property="og:site_name" content="sivkun">
+<meta property="og:description" content="Redux http://redux.js.org/?q=#入门参考：http://www.ruanyifeng.com/blog/2016/09/redux_tutorial_part_one_basic_usages.html  设计思想：  Web 应用是一个状态机，视图和状态是一一对应的。 所有的状态，保存在一个对象里面   基本概念和API StoreStore就是保存数据的地方，可以把">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-07-06T06:47:16.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="redux学习笔记">
+<meta name="twitter:description" content="Redux http://redux.js.org/?q=#入门参考：http://www.ruanyifeng.com/blog/2016/09/redux_tutorial_part_one_basic_usages.html  设计思想：  Web 应用是一个状态机，视图和状态是一一对应的。 所有的状态，保存在一个对象里面   基本概念和API StoreStore就是保存数据的地方，可以把">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://fsysfq.top/2017/03/10/redux学习笔记/"/>
+
+
+
+
+
+  <title>redux学习笔记 | sivkun</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">sivkun</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">follow your heart</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://fsysfq.top/2017/03/10/redux学习笔记/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="石富全">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="sivkun">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">redux学习笔记</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-10T15:09:45+08:00">
+                2017-03-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/03/10/redux学习笔记/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/10/redux学习笔记/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Redux"><a href="#Redux" class="headerlink" title="Redux"></a>Redux</h1><blockquote>
+<p><a href="http://redux.js.org/?q=#" target="_blank" rel="noopener">http://redux.js.org/?q=#</a><br>入门参考：<br><a href="http://www.ruanyifeng.com/blog/2016/09/redux_tutorial_part_one_basic_usages.html" target="_blank" rel="noopener">http://www.ruanyifeng.com/blog/2016/09/redux_tutorial_part_one_basic_usages.html</a></p>
+</blockquote>
+<h2 id="设计思想："><a href="#设计思想：" class="headerlink" title="设计思想："></a>设计思想：</h2><blockquote>
+<ol>
+<li>Web 应用是一个状态机，视图和状态是一一对应的。</li>
+<li>所有的状态，保存在一个对象里面</li>
+</ol>
+</blockquote>
+<h2 id="基本概念和API"><a href="#基本概念和API" class="headerlink" title="基本概念和API"></a>基本概念和API</h2><ol>
+<li><p>Store<br>Store就是保存数据的地方，可以把它看成一个容器。整个应用只能有一个Store。<br>Redux提供<code>createStore</code>这个函数，用来生成Store。</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;createStore&#125; <span class="keyword">from</span> <span class="string">'redux'</span>;</span><br><span class="line"><span class="keyword">const</span> store=createStore(fn);</span><br></pre></td></tr></table></figure>
+<p><code>createStore</code>函数接受另一函数作为参数，返回生成的Store对象      </p>
+<a id="more"></a></li>
+<li><p>State<br><code>Store</code>对象包含所有数据。如果想要得到某个时间点的数据，就要对Store生成快照。这种时点的数据集合，就叫做State。<br>当前时刻的State，可以通过store.getState()拿到。  </p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;createStore&#125; <span class="keyword">from</span> <span class="string">'redux'</span>;</span><br><span class="line"><span class="keyword">const</span> store = createStore(fn);</span><br><span class="line"><span class="keyword">const</span> state = store.getState();</span><br></pre></td></tr></table></figure>
+<p>Redux规定，一个state对应一个view。只要state相同，view就相同。你知道state就知道view是什么样，反之亦然。</p>
+</li>
+<li><p>Action<br>State的变化导致view的变化。但是用户接触不到state，只能接触到view。所以，state的变化必须是view导致的。<br>action就是view发出的通知，表示state应该要发生变化了。<br>action就是一个对象。其中的<code>type</code>属性是必须的，表示action的名称。其他属性可以自由设置，社区有一个<a href="https://github.com/acdlite/flux-standard-action" target="_blank" rel="noopener">规范</a>可以参考</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> action=&#123;</span><br><span class="line">  type:<span class="string">"ADD_TODO"</span>,</span><br><span class="line">  payload:<span class="string">'learn Redux'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以这样理解，Action 描述当前发生的事情。改变 State 的唯一办法，就是使用 Action。它会运送数据到 Store。   </p>
+</li>
+<li><p>Action Creator<br>View 要发送多少消息，就会有多少种Action。可以定义一个函数生成Action，这个函数就叫Action Creator。</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> ADD_TODO = <span class="string">'添加 TODO'</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">addTodo</span>(<span class="params">text</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span>&#123;</span><br><span class="line">    type:ADD_TODO,</span><br><span class="line">    payload:text</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> action = addTodo(<span class="string">'Learn Redux'</span>);</span><br></pre></td></tr></table></figure>
+<p><code>addTodo</code>函数就是一个Action Creator。  </p>
+</li>
+<li><p>store.dispatch()<br>store.dispatch() 是view 发出的唯一方法。</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;createStore&#125; <span class="keyword">from</span> <span class="string">'redux'</span>;</span><br><span class="line"><span class="keyword">const</span> store = createStore(fn);</span><br><span class="line">store.dispatch(&#123;</span><br><span class="line">  type:<span class="string">'ADD_TODO'</span>,</span><br><span class="line">  payload:<span class="string">'Learn Redux'</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p><code>store.dispatch</code>接受一个Action对象作为参数，将它发送出去。<br>结合Action Creator ，这段代码可以改写如下：<br><code>store.dispatch(addTodo(&#39;learn Redux&#39;))</code></p>
+</li>
+<li><p>Reducer<br>store 收到Action 以后，必须给出一个新的state ，这样view才会发生变化。这种state的计算过程就叫做Reducer。<br>Reducer是一个函数，它接受Action 和当前 State 作为参数，返回一个新的state。</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> reducer = <span class="function"><span class="keyword">function</span> (<span class="params">state, action</span>) </span>&#123;</span><br><span class="line">  <span class="comment">//...</span></span><br><span class="line">  <span class="keyword">return</span> new_state;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>整个应用的初始状态，可以作为State的默认值。如下例子：</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> defaultState=<span class="number">0</span>;</span><br><span class="line"><span class="keyword">const</span> reducer = <span class="function">(<span class="params">state = defaultState ,action</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">switch</span> (action.type)&#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="string">'ADD'</span>:</span><br><span class="line">      <span class="keyword">return</span> state + action.payload;</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">      <span class="keyword">return</span> state;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> state = reducer(<span class="number">1</span>, &#123;</span><br><span class="line">  type:<span class="string">'ADD'</span>,</span><br><span class="line">  payload:<span class="number">2</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>上面代码中，reducer函数收到名为ADD的 Action 以后，就返回一个新的 State，作为加法的计算结果。其他运算的逻辑（比如减法），也可以根据 Action 的不同来实现。<br>实际应用中，Reducer 函数不用像上面这样手动调用，store.dispatch方法会触发 Reducer 的自动执行。为此，Store 需要知道 Reducer 函数，做法就是在生成 Store 的时候，将 Reducer 传入createStore方法。</p>
+</li>
+</ol>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;createStore&#125; <span class="keyword">from</span> <span class="string">'redux'</span>;</span><br><span class="line"><span class="keyword">const</span> store = createStore(reducer);</span><br></pre></td></tr></table></figure>
+<p>上面代码中，createStore接受Reducer作为参数，生成一个新的Store。以后每当store.dispatch发送过来一个新的action，就会自动调用Reducer，得到新的state。<br>为什么这个函数叫做Reducer？因为他可以作为数组的reduce方法的参数。请看下面的例子，一系列action对象按照顺序作为一个数组。</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> actions = [</span><br><span class="line">  &#123;<span class="attr">type</span>:<span class="string">'ADD'</span>,<span class="attr">payload</span>:<span class="number">0</span>&#125;,</span><br><span class="line">  &#123;<span class="attr">type</span>:<span class="string">'ADD'</span>,<span class="attr">payload</span>:<span class="number">1</span>&#125;,</span><br><span class="line">  &#123;<span class="attr">type</span>:<span class="string">'ADD'</span>,<span class="attr">payload</span>:<span class="number">2</span>&#125;,</span><br><span class="line">];</span><br><span class="line"><span class="keyword">const</span> total = actions.reduce(reducer,<span class="number">0</span>);<span class="comment">//3</span></span><br></pre></td></tr></table></figure>
+<p>上面代码中，数组actions表示依次有三个 Action，分别是加0、加1和加2。数组的reduce方法接受 Reducer 函数作为参数，就可以直接得到最终的状态3。</p>
+<ol start="7">
+<li><p>纯函数<br>Reducer函数最重要特征是，他是一个纯函数。也就是说，只要是同样的输入，必定得到同样的输出。<br>纯函数是函数编程的概念，必须遵守以下约束。</p>
+<blockquote>
+<p>不得改写参数<br>不能调用系统 I/O 的API<br>不能调用Date.now()或者Math.random()等不纯的方法，因为每次会得到不一样的结果</p>
+</blockquote>
+</li>
+</ol>
+<p>由于 Reducer 是纯函数，就可以保证同样的State，必定得到同样的 View。但也正因为这一点，Reducer 函数里面不能改变 State，必须返回一个全新的对象，请参考下面的写法。</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//state是一个对象</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">reducer</span>(<span class="params">state, action</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">Object</span>.assign(&#123;&#125;,state,&#123; thingToChange &#125;);</span><br><span class="line">  <span class="comment">//或者</span></span><br><span class="line">  <span class="keyword">return</span> &#123;...state,...newState&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//state 是一个数组</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">reducer</span>(<span class="params">state,action</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> [...state,newItem];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最好把 State 对象设成只读。你没法改变它，要得到新的 State，唯一办法就是生成一个新对象。这样的好处是，任何时候，与某个 View 对应的 State 总是一个不变的对象</p>
+<ol start="8">
+<li><p>store.subscribe()<br>store 允许使用store.subscribe方法设置监听函数，一旦state发生变化，就自动执行这个函数。</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;createStore&#125; <span class="keyword">from</span> <span class="string">'redux'</span>;</span><br><span class="line"><span class="keyword">const</span> store = createStore(reducer);</span><br><span class="line"></span><br><span class="line">store.subscribe(listener);</span><br></pre></td></tr></table></figure>
+<p>显然，只要把view的更新函数（对于React项目，就是组件的render方法或setState方法）放入listen，就会实现view的自动渲染。<br>store.subscribe方法返回一个函数，调用这个函数就可以解除监听。</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> unsubscribe = store.subscribe(<span class="function"><span class="params">()</span>=&gt;</span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(store.getState())</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">unsubscribe();</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h1 id="Store的实现。"><a href="#Store的实现。" class="headerlink" title="Store的实现。"></a>Store的实现。</h1><p>  store提供了三个方法。</p>
+<blockquote>
+<p>store.getState()<br>store.dispatch()<br>store.subscribe()</p>
+</blockquote>
+  <figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;createStore&#125; <span class="keyword">from</span> <span class="string">'redux'</span>;</span><br><span class="line"><span class="keyword">let</span> &#123;subscribe,dispatch,getState&#125; = createStore(reducer);</span><br></pre></td></tr></table></figure>
+<p>createStore方法还可以接受第二个参数，表示 State 的最初状态。这通常是服务器给出的。</p>
+<p><code>let store = createStore(todoApp, window.STATE_FROM_SERVER)</code></p>
+<p>上面代码中，window.STATE_FROM_SERVER就是整个应用的状态初始值。注意，如果提供了这个参数，它会覆盖 Reducer 函数的默认初始值。<br>下面是createStore方法的一个简单实现，可以了解一下 Store 是怎么生成的。</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> createStore = <span class="function">(<span class="params">reducer</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">let</span> state;</span><br><span class="line">  <span class="keyword">let</span> listeners=[];</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> getState=<span class="function"><span class="params">()</span> =&gt;</span> state;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> dispatch = <span class="function">(<span class="params">action</span>) =&gt;</span> &#123;</span><br><span class="line">    state = reducer(state,action);</span><br><span class="line">    listeners.forEach(<span class="function"><span class="params">listener</span> =&gt;</span> listener());</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> subscribe = <span class="function">(<span class="params">listener</span>) =&gt;</span> &#123;</span><br><span class="line">    listeners.push(listener);</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">      listeners = listeners.filter(<span class="function"><span class="params">l</span> =&gt;</span> l !==listener);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  dispatch(&#123;&#125;);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> &#123;getState,dispatch,subscribe&#125;;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="Reducer的拆分"><a href="#Reducer的拆分" class="headerlink" title="Reducer的拆分"></a>Reducer的拆分</h1><p>  <code>Reducer函数负责生成state</code>。由于整个应用只有一个state对象，包含所有数据，对于大型应用来说，这个state必然十分庞大，导致Reducer函数也十分庞大。</p>
+  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> chatReducer = <span class="function">(<span class="params">state = defaultState, action = &#123;&#125;</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> &#123; type, payload &#125; = action;</span><br><span class="line">  <span class="keyword">switch</span>(type)&#123;</span><br><span class="line">    <span class="keyword">case</span> ADD_CHAT:</span><br><span class="line">      <span class="keyword">return</span> <span class="built_in">Object</span>.assign(&#123;&#125;,state,&#123;</span><br><span class="line">        chatLog:state.chatLog.concat(payload)</span><br><span class="line">      &#125;);</span><br><span class="line">    <span class="keyword">case</span> CHANGE_STATUS:</span><br><span class="line">      <span class="keyword">return</span> <span class="built_in">Object</span>.assign(&#123;&#125;,state,&#123;</span><br><span class="line">        statusMessage:payload</span><br><span class="line">      &#125;);</span><br><span class="line">    <span class="keyword">case</span> CHANGE_USERNAME:</span><br><span class="line">      <span class="keyword">return</span> <span class="built_in">Object</span>.assign(&#123;&#125;,state,&#123;</span><br><span class="line">        userName:payload</span><br><span class="line">      &#125;);</span><br><span class="line">    <span class="keyword">default</span>:<span class="keyword">return</span> state;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  上面代码中，三种 Action 分别改变 State 的三个属性。   </p>
+<blockquote>
+<p>ADD_CHAT：chatLog属性<br>CHANGE_STATUS：statusMessage属性<br>CHANGE_USERNAME：userName属性<br>这三个属性之间没有联系，这提示我们可以把 Reducer 函数拆分。不同的函数负责处理不同属性，最终把它们合并成一个大的 Reducer 即可。</p>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> chatReducer = <span class="function">(<span class="params">state = defaultState,action = &#123;&#125;</span>)=&gt;</span>&#123;</span><br><span class="line">  <span class="keyword">return</span>&#123;</span><br><span class="line">    chatLog:chatLog(state.chatLog,action),</span><br><span class="line">    statusMessage:statusMessage(state.statusMessage,action),</span><br><span class="line">    userName:userName(state.userName,action)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>上面代码中，Reducer 函数被拆成了三个小函数，每一个负责生成对应的属性。<br>这样一拆，Reducer 就易读易写多了。而且，这种拆分与 React 应用的结构相吻合：一个 React 根组件由很多子组件构成。这就是说，子组件与子 Reducer 完全可以对应。<br>Redux 提供了一个<code>combineReducers</code>方法，用于 Reducer 的拆分。你只要定义各个子 Reducer 函数，然后用这个方法，将它们合成一个大的 Reducer。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;combineReducers&#125; <span class="keyword">from</span> <span class="string">'redux'</span>;</span><br><span class="line"><span class="keyword">const</span> chatReducer = combineReducers(</span><br><span class="line">  chatLog,</span><br><span class="line">  statusMessage,</span><br><span class="line">  userName</span><br><span class="line">)</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> todoApp;</span><br></pre></td></tr></table></figure>
+<p>上面的代码通过<code>combineReducers</code>方法将三个子 Reducer 合并成一个大的函数。<br>这种写法有一个前提，就是 State 的属性名必须与子 Reducer 同名。如果不同名，就要采用下面的写法。<br><code>只要视图发来一个action，sotre会调用每一个子reducer，每一个子reducer只会更新其对应的store的属性</code></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> reducer = combineReducers(&#123;</span><br><span class="line">  a: doSomethingWithA,</span><br><span class="line">  b: processB,</span><br><span class="line">  c: c</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 等同于</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">reducer</span>(<span class="params">state = &#123;&#125;, action</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    a: doSomethingWithA(state.a, action),</span><br><span class="line">    b: processB(state.b, action),</span><br><span class="line">    c: c(state.c, action)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>下面是<code>combineReducer</code>的简单实现。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> combineReducers = <span class="function"><span class="params">reducers</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function">(<span class="params">state = &#123;&#125;,action</span>)=&gt;</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">Object</span>.keys(reducers).reduce(</span><br><span class="line">      (nextState,key) =&gt; &#123;</span><br><span class="line">        nextState[key] = reducers[key]( state[key] , action);</span><br><span class="line">        <span class="keyword">return</span> newxtState;</span><br><span class="line">      &#125;,</span><br><span class="line">      &#123;&#125;</span><br><span class="line">    );</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>可以吧所有的子Reducer放在一个文件里，然后统一引入。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;combineReducers&#125; <span class="keyword">from</span> <span class="string">'redux'</span></span><br><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> reducers <span class="keyword">from</span> <span class="string">'./reducers'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> reducer = combineReducers(reducers)</span><br></pre></td></tr></table></figure>
+<h2 id="工作流"><a href="#工作流" class="headerlink" title="工作流"></a>工作流</h2><p>  Redux的工作流程梳理：<br>  <a href="./Redux-flow.png">Redux Flow</a></p>
+<p>首先，用户发出 Action。</p>
+<p><code>store.dispatch(action);</code></p>
+<p>然后，Store 自动调用 Reducer，并且传入两个参数：当前 State 和收到的 Action。 Reducer 会返回新的 State 。</p>
+<p><code>let nextState = todoApp(previousState, action);</code></p>
+<p>State 一旦有变化，Store 就会调用监听函数。</p>
+<p>// 设置监听函数<br><code>store.subscribe(listener);</code></p>
+<p>listener可以通过store.getState()得到当前状态。如果使用的是 React，这时可以触发重新渲染 View。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">listerner</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> newState = store.getState();</span><br><span class="line">  component.setState(newState);   </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="Redux-入门教程（二）：中间件与异步操作"><a href="#Redux-入门教程（二）：中间件与异步操作" class="headerlink" title="Redux 入门教程（二）：中间件与异步操作"></a>Redux 入门教程（二）：中间件与异步操作</h1><blockquote>
+<p><a href="http://www.ruanyifeng.com/blog/2016/09/redux_tutorial_part_two_async_operations.html" target="_blank" rel="noopener">http://www.ruanyifeng.com/blog/2016/09/redux_tutorial_part_two_async_operations.html</a></p>
+</blockquote>
+<pre><code>一个关键问题没有解决：异步操作怎么办？Action 发出以后，Reducer 立即算出 State，这叫做同步；Action 发出以后，过一段时间再执行 Reducer，这就是异步。
+</code></pre><p>怎么才能 Reducer 在异步操作结束后自动执行呢？这就要用到新的工具：中间件（middleware）。</p>
+<h2 id="中间件的概念"><a href="#中间件的概念" class="headerlink" title="中间件的概念"></a>中间件的概念</h2><p>  为了理解中间件，让我们站在框架作者的角度思考问题：如果要添加功能，你会在哪个环节添加？</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1.</span> Reducer:纯函数，只承担计算State的功能，不适合承担其他功能，也承担不了，因为理论上，纯函数不能进行读写操作。</span><br><span class="line"><span class="number">2.</span> View：与State 一一对应，可以看做State的视觉层，也不适合承担其他功能。</span><br><span class="line"><span class="number">3.</span> Action：存放数据的对象，即消息的载体，只能被别人操作，自己不能进行任何操作。</span><br></pre></td></tr></table></figure>
+<p>想来想去，只有发送Action的这个步骤，即<code>store.dispatch()</code>方法，可以添加功能。举例来说，要添加日志功能，把Action和State打印出来，<br>可以对<code>store.dispatch</code>进行如下改造。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> next = store.dispatch;</span><br><span class="line">store.dispatch = <span class="function"><span class="keyword">function</span> <span class="title">dispatchAndLog</span>(<span class="params">action</span>)</span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'dispatching'</span>,action);</span><br><span class="line">  next(action);</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'next state'</span>,store.getState());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="中间件的用法"><a href="#中间件的用法" class="headerlink" title="中间件的用法"></a>中间件的用法</h2><p>本教程不涉及如何编写中间件，因为常用的中间件都有现成的，只要引用别人写好的模块即可。<br>比如，上一节的日志中间件，就有现成的<a href="https://github.com/evgenyrodionov/redux-logger" target="_blank" rel="noopener">redux-logger</a>模块。这里只介绍怎么使用中间件。</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;applyMiddleware,createStore&#125; <span class="keyword">from</span> <span class="string">'redux'</span>;</span><br><span class="line"><span class="keyword">import</span> createLogger <span class="keyword">from</span> <span class="string">'redux-logger'</span>;</span><br><span class="line"><span class="keyword">const</span> logger = createLogger();</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> store = createStore(</span><br><span class="line">  reducer,</span><br><span class="line">  applyMiddleware(logger)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<p>上面代码中，<code>redux-logger</code>提供一个生成器<code>createLogger</code>,可以生成日志中间件<code>logger</code>。然后，将它放在<code>applyMiddleware</code>方法中，传入<code>createStore</code>方法，<br>就完成了<code>store.dispatch()</code>的功能增强。<br>这里有两点需要注意：</p>
+<ol>
+<li><code>createStore</code> 方法可以结接收整个应用的初始状态作为参数，那样的话，<code>applyMiddleware</code>就是第三个参数了。</li>
+</ol>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> store = createStore(</span><br><span class="line">  reducer,</span><br><span class="line">  initial_state,</span><br><span class="line">  applyMiddleware(logger)</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>中间件的次序有讲究</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">const</span> store = createStore(</span><br><span class="line">   reducer,</span><br><span class="line">   applyMiddleware(thunk,promise,logger)</span><br><span class="line"> )</span><br><span class="line"><span class="string">``</span><span class="string">` </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">上面代码中，`</span>applyMiddleware<span class="string">`方法的三个参数，就是三个中间件。有的中间件有次序要求，使用前要查一下文档。比如，`</span>logger<span class="string">`就一定要放在最后，否则输出结果会不正确。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">## applyMiddlewares()</span></span><br><span class="line"><span class="string">看到这里，你可能会问，`</span>applyMiddlewares<span class="string">`这个方法到底是干什么的？</span></span><br><span class="line"><span class="string">它是 Redux 的原生方法，作用是将所有中间件组成一个数组，依次执行。下面是它的源码。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">`</span><span class="string">``</span>js</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="function"><span class="keyword">function</span> <span class="title">applayMiddleware</span>(<span class="params">...middlewares</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function">(<span class="params">createStore</span>) =&gt;</span> (reducer,preloadedState,enhancer)=&gt;&#123;</span><br><span class="line">    <span class="keyword">var</span> store = createStore(reducer,preloadedState,enhancer);</span><br><span class="line">    <span class="keyword">var</span> dispatch = store.dispatch;</span><br><span class="line">    <span class="keyword">var</span> chain = [];</span><br><span class="line">    <span class="keyword">var</span> middlewareAPI = &#123;</span><br><span class="line">      getState:store.getState,</span><br><span class="line">      dispatch:<span class="function">(<span class="params">action</span>)=&gt;</span>dispatch(action)</span><br><span class="line">    &#125;;</span><br><span class="line">    chain = middlewares.map(<span class="function"><span class="params">middleware</span> =&gt;</span> middleware(middlewareAPI));</span><br><span class="line">    dispatch = compose(...chain)(store.dispatch);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> &#123;...store,dispatch&#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面代码中，所有中间件被放进了一个数组chain，然后嵌套执行，最后执行store.dispatch。可以看到，中间件内部（middlewareAPI）可以拿到getState和dispatch这两个方法。</p>
+<h2 id="异步操作的基本思路"><a href="#异步操作的基本思路" class="headerlink" title="异步操作的基本思路"></a>异步操作的基本思路</h2><p>理解了中间件以后，就可以处理异步操作了。<br>同步操作只要发出一种Action即可，异步操作的差别就是他要出三种Action。</p>
+<blockquote>
+<ul>
+<li>操作发起时的 Action</li>
+<li>操作成功时的 Action</li>
+<li>操作失败时的 Action<br>以向服务器获取数据为例，三种Action可以两种不同的写法。</li>
+</ul>
+</blockquote>
+ <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//写法一： 名相同，参数不同</span></span><br><span class="line">&#123; <span class="attr">type</span>: <span class="string">'FETCH_POSTS'</span> &#125;</span><br><span class="line">&#123; <span class="attr">type</span>: <span class="string">'FETCH_POSTS'</span>, <span class="attr">status</span>: <span class="string">'error'</span>, <span class="attr">error</span>: <span class="string">'Oops'</span> &#125;</span><br><span class="line">&#123; <span class="attr">type</span>: <span class="string">'FETCH_POSTS'</span>, <span class="attr">status</span>: <span class="string">'success'</span>, <span class="attr">response</span>: &#123; ... &#125; &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//写法二： 名称不同</span></span><br><span class="line">&#123; <span class="attr">type</span>: <span class="string">'FETCH_POSTS_REQUEST'</span> &#125;</span><br><span class="line">&#123; <span class="attr">type</span>: <span class="string">'FETCH_POSTS_FAILURE'</span>, <span class="attr">error</span>:<span class="string">"Oops"</span>&#125;</span><br><span class="line">&#123; <span class="attr">type</span>: <span class="string">'FETCH_POSTS_SUCCESS'</span>, <span class="attr">response</span>: &#123;...&#125;&#125;</span><br></pre></td></tr></table></figure>
+<p>除了Action种类不同，异步操作的State也要进行改造，反应不同的操作状态。下面是State的例子。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> state = &#123;</span><br><span class="line">  <span class="comment">//....</span></span><br><span class="line">  isFetching:<span class="literal">true</span>,</span><br><span class="line">  didInvalidate:<span class="literal">true</span>,</span><br><span class="line">  lastUpdated:<span class="string">'xxxxxx'</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>上面代码中，State属性isFetching表示是否在抓取数据。didInvalidate表示数据是否过时，lastUpdate表示上一次更新时间。<br>现在，整个异步操作的思路就很清楚了。</p>
+<ul>
+<li>操作开始时，发出一个Action，触发State更新为“正在操作”状态，view重新渲染。</li>
+<li>操作结束后，再送出一个Action，触发State更新为‘操作结束’状态，view再一次重新渲染。</li>
+</ul>
+<h2 id="redux-thunk-中间件"><a href="#redux-thunk-中间件" class="headerlink" title="redux-thunk 中间件"></a>redux-thunk 中间件</h2><p>异步操作至少要送出两个Action：用户触发第一个Action，这跟同步操作一样，没有问题。如何才能在操作结束时，系统自动送出第二个Action呢？<br>奥妙就在Action creator中。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AsyncApp</span> <span class="keyword">extends</span> <span class="title">Component</span></span>&#123;</span><br><span class="line">  componentDidMount() &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; dispatch, selectedPost &#125; = <span class="keyword">this</span>.props;</span><br><span class="line">    dispatch(fetchPosts(selectedPost));</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面代码是一个异步组件的例子。加载成功后（componentDidMount方法），它送出了（dispatch方法）一个Action，向服务器要求数据<br><code>fetchPosts(selectedSubreddit)</code>。这里fetchPosts就是Action Creator。<br>下面就是fetchPosts的代码，关键之处就在里面。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Async Action  Example</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> fetch <span class="keyword">from</span> <span class="string">'isomorphic-fetch'</span>;</span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">fetchFriends</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="params">dispatch</span> =&gt;</span> &#123;</span><br><span class="line">    dispatch(&#123;<span class="attr">type</span>: <span class="string">"FETCH_FRIENDS"</span> &#125;);</span><br><span class="line">    <span class="keyword">return</span> fetch(<span class="string">'http://localhost/api/friends'</span>)</span><br><span class="line">      .then(<span class="function"><span class="params">response</span> =&gt;</span> response.json())</span><br><span class="line">      .then(<span class="function"><span class="params">json</span> =&gt;</span>&#123;</span><br><span class="line">        dispatch(&#123;<span class="attr">type</span>: <span class="string">'RECEIVE_FRIENDS'</span>,<span class="attr">payload</span>:json&#125;);</span><br><span class="line">      &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> fetchPosts = <span class="function"><span class="params">postTitle</span> =&gt;</span> (dispatch,getState)=&gt;&#123;</span><br><span class="line">  dispatch(requestPosts(postTitle));</span><br><span class="line">  <span class="keyword">return</span> fetch(<span class="string">`/some/API/<span class="subst">$&#123;postTitle&#125;</span>.json`</span>)</span><br><span class="line">    .then(<span class="function"><span class="params">response</span> =&gt;</span> response.json())</span><br><span class="line">    .then(<span class="function"><span class="params">json</span> =&gt;</span> dispatch(recervePosts(postTitle,json));</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//使用方法一</span></span><br><span class="line">store.dispatch(fetchPosts(<span class="string">'reactjs'</span>))</span><br><span class="line"><span class="comment">//使用方法二</span></span><br><span class="line">store.dispatch(fetchPosts(<span class="string">'reactjs'</span>)).then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(store.getState)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>上面代码中，<code>fetchPosts</code>是一个Action Creator（动作生成器），返回一个函数。这个函数执行后，先发出一个Action（<code>requestPosts(postTitle)</code>）,<br>然后进行异步操作，拿到结果后，先将结果转化为JSON格式，然后再发出一个Action（<code>receivePosts(postTitle,json)</code>）。</p>
+<ol>
+<li>fetchPosts返回了一个函数，而普通Action Creator默认返回一个对象。</li>
+<li>返回的函数的参数是dispatch和getState这两个Redux方法，普通的Action Creator的参数是Action内容</li>
+<li>返回的函数中，先发出一个Action（requestPosts(postTitle)），表示操作开始。</li>
+<li><p>异步操作结束后，再发出一个Action（receivePost(postTitle,json)）,表示操作结束。<br>这样的处理，就解决了自动发送第二个Action 的问题。但是又带来了一个新的问题，Action是由store.dispatch发送的。而store.dispatch方法正常情况下，<br>参数只能是对象，而不能是函数。这时，就要使用中间件<a href="https://github.com/gaearon/redux-thunk" target="_blank" rel="noopener">redux-thunk</a>。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">import</span> &#123;createStore, applyMiddleware&#125; <span class="keyword">from</span> <span class="string">'redux'</span></span><br><span class="line"> <span class="keyword">import</span> thunk <span class="keyword">from</span> <span class="string">'redux-thunk'</span></span><br><span class="line"> <span class="keyword">import</span> reducer <span class="keyword">from</span> <span class="string">'./reducers'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//Note: this  api requires redux@&gt;=3.1.0</span></span><br><span class="line"> <span class="keyword">const</span> store= createStore(</span><br><span class="line">   reducer,</span><br><span class="line">   applyMiddleware(thunk)</span><br><span class="line"> )</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>上面代码使用redux-thunk中间件，改造store.dispatch，使得后者可以接受函数作为参数。<br>因此，异步操作的第一种解决方案就是，写出一个返回函数的 Action Creator，然后使用redux-thunk中间件改造store.dispatch。</p>
+<h2 id="redux-promise中间件"><a href="#redux-promise中间件" class="headerlink" title="redux-promise中间件"></a>redux-promise中间件</h2><p> 既然Action Creator可以返回函数，当然也可以返回其它值。另一种异步操作的解决方案，就是让Action Creator 返回一个Promise对象。<br> 这就需要使用redux-promise中间件。</p>
+ <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; createStore, applyMiddleware &#125; <span class="keyword">from</span> <span class="string">'redux'</span>;</span><br><span class="line"><span class="keyword">import</span> promiseMiddleware <span class="keyword">from</span> <span class="string">'redux-promise'</span>;</span><br><span class="line"><span class="keyword">import</span> reducer <span class="keyword">from</span> <span class="string">'./reducers'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> store = createStore(</span><br><span class="line">  reducer,</span><br><span class="line">  applyMiddleware(promiseMiddleware)</span><br><span class="line">) ;</span><br></pre></td></tr></table></figure>
+<p> 这个中间件是的<code>store.dispatch</code>方法可以接受Promise对象作为参数。这时，Action Creator有两种写法。<br> 写法一，返回值是一个Promise对象。</p>
+ <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> fetchPosts = <span class="function">(<span class="params">dispatch, postTitle</span>) =&gt;</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span> (<span class="params">resolve,reject</span>)</span>&#123;</span><br><span class="line">  dispatch(requestPosts(postTitle));</span><br><span class="line">  <span class="keyword">return</span> fetch(<span class="string">`/some/API/<span class="subst">$&#123;postTitle&#125;</span>.json`</span>)</span><br><span class="line">     .then(<span class="function"><span class="params">response</span> =&gt;</span> &#123;</span><br><span class="line">       type: <span class="string">'FETCH_POSTS'</span>,</span><br><span class="line">       payload: response.json()</span><br><span class="line">     &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p> 写法二，Action对象的payload属性是一个Promise对象。这需要从<code>redux-actions</code>模块引入createAction方法，并且写法也要变成下面这样。</p>
+ <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; createAction &#125; <span class="keyword">from</span> <span class="string">'redux-actions'</span>;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AsyncApp</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line">  componentDidMount()&#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; dispatch , selectedPost &#125; = <span class="keyword">this</span>.props;</span><br><span class="line">    <span class="comment">//发出同步Action</span></span><br><span class="line">    dispatch(requestPosts(selectedPost));</span><br><span class="line">    <span class="comment">//发出异步Action</span></span><br><span class="line">    dispatch(createAction(</span><br><span class="line">      <span class="string">'FETCH_PSOTS'</span>,</span><br><span class="line">      fetch(<span class="string">`/some/API/<span class="subst">$&#123;postTitle&#125;</span>.json`</span>)</span><br><span class="line">         .then(<span class="function"><span class="params">response</span>=&gt;</span>response.json())</span><br><span class="line">    ));</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> 上面代码中，第二个<code>dispatch</code>方法发出的是异步Action，只有等到操作结束，这个Action才会实际发出。<br> 注意，createAction的 第二个参数必须是一个Promise对象。<br> 看一下<code>redux-promise</code>的<a href="https://github.com/acdlite/redux-promise/blob/master/src/index.js" target="_blank" rel="noopener">源码</a>，就会明白它内部是如何操作的。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="function"><span class="keyword">function</span> <span class="title">promiseMiddleware</span>(<span class="params">&#123; dispatch &#125;</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="params">next</span> =&gt;</span> action =&gt; &#123;</span><br><span class="line">    <span class="keyword">if</span>(!isFSA(action))&#123;</span><br><span class="line">      <span class="keyword">return</span> isPromise(action)</span><br><span class="line">        ? action.then(dispatch)</span><br><span class="line">        : next(action);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> isPromise(action.payload)</span><br><span class="line">      ? action.payload.then(</span><br><span class="line">        result =&gt; dispatch(&#123;...action,<span class="attr">payload</span>: result &#125;),</span><br><span class="line">        error =&gt;&#123;</span><br><span class="line">          dispatch(&#123;...action,<span class="attr">payoad</span>:error,<span class="attr">error</span>:<span class="literal">true</span>&#125;);</span><br><span class="line">          <span class="keyword">return</span> <span class="built_in">Promise</span>.reject(error);</span><br><span class="line">        &#125;</span><br><span class="line">      )</span><br><span class="line">      : next(action);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>从上面代码可以看出，如果Action本身是一个Promise，它resolve以后的值应该是一个Action，会被<br><code>dispatch</code>方法送出（<code>action.then(dispatch)</code>）,但reject以后不会有任何动作；如果Action对象<br>的<code>payload</code>属性是一个Promise对象，那么无论resolve和reject，dispatch方法都会发出Action。<br>中间件和异步操作，就介绍到这里。</p>
+<h1 id="React-Redux-的用法"><a href="#React-Redux-的用法" class="headerlink" title="React-Redux 的用法"></a>React-Redux 的用法</h1><blockquote>
+<p><a href="http://www.ruanyifeng.com/blog/2016/09/redux_tutorial_part_three_react-redux.html" target="_blank" rel="noopener">http://www.ruanyifeng.com/blog/2016/09/redux_tutorial_part_three_react-redux.html</a></p>
+</blockquote>
+<h2 id="UI组件"><a href="#UI组件" class="headerlink" title="UI组件"></a>UI组件</h2><p>React-Redux将所有组件分成两大类：UI组件（presentational component）和容器组件（container component）</p>
+<p>UI组件有以下几个特征。</p>
+<ul>
+<li>只负责UI的呈现，不带有任何业务组件</li>
+<li>没有状态（即不使用this.state这个变量）</li>
+<li>所有数据都由参数（this.props）提供</li>
+<li><p>不使用任何Redux的API</p>
+<p>下面就是一个UI组件的例子。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> Title=<span class="function"><span class="params">value</span> =&gt;</span> &lt;h1&gt;&#123;value&#125;&lt;<span class="regexp">/h1&gt;;</span></span><br></pre></td></tr></table></figure>
+<p>因为不含有状态，UI组件又称为“纯组件”，即纯函数一样，纯粹由参数决定它的值。</p>
+</li>
+</ul>
+<p>##容器组件<br>容器组件特征恰恰相反</p>
+<ul>
+<li>负责管理数据和业务逻辑，不负责 UI 的呈现。</li>
+<li>带有内部状态state</li>
+<li>使用Redux的API</li>
+</ul>
+<p>总之，UI组件负责UI的呈现，容器组件负责管理数据和逻辑。<br>如果一个组件既有UI又有业务逻辑，则将它拆分成下面的结构：外面是一个容器组件，里面包含了一个UI组件。前者负责与外部的通讯，将数据传给后者，由后者渲染出视图。<br>React-Redux规定，所有的UI组件都由用户提供，容器组件则是由React-Redux自动生成。也就是说，用户负责视觉层，状态管理则是全部交给它。</p>
+<h2 id="connect"><a href="#connect" class="headerlink" title="connect()"></a>connect()</h2><p>React-Redux提供connect方法，用于从UI组件生成容器组件。connect的意思，就是将这两种组件连起来。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;connect&#125; <span class="keyword">from</span> <span class="string">'react-redux'</span></span><br><span class="line"><span class="keyword">const</span> VisibleTodoList = connect()(TodoList);</span><br></pre></td></tr></table></figure>
+<p>上面代码中，TodoList是UI组件，VisibleTodoList就是由React-Redux通过connect方法自动生成的容器组件。<br>但是，因为没有定义业务逻辑，上面这个容器组件毫无意义，只是UI组件的一个单纯的包装层。为了定义业务逻辑，需要给出下面两方面的信息。</p>
+<ol>
+<li>输入逻辑：外部的数据（即state对象）如何转换为UI组件的参数</li>
+<li>输出逻辑：用户发出的动作如何变为 Action 对象，从UI组件传出去</li>
+</ol>
+<p>因此，connect方法的完整API如下。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; connect &#125; <span class="keyword">from</span> <span class="string">'react-redux'</span></span><br><span class="line"><span class="keyword">const</span> VisibleTodoList = connect(</span><br><span class="line">  mapStateToProps,</span><br><span class="line">  mapDispatchToProps,</span><br><span class="line">)(TodoList)</span><br></pre></td></tr></table></figure>
+<p>上面代码中，connect 方法接受两个参数：mapStateToProps和mapDispatchToProps。它们定义了UI组件的业务逻辑。<br>前者负责输入逻辑，即将state映射到UI组件的参数（props），后者负责输出逻辑，即将用户对UI组件的操作映射成Action。</p>
+<h2 id="mapStateToProps"><a href="#mapStateToProps" class="headerlink" title="mapStateToProps()"></a>mapStateToProps()</h2><p><code>mapStateToProps</code>是一个函数。它的作用就是像它的名字那样，建立一个从（外部的）state对象到（UI组件的）props对象的映射关系。<br>作为函数，mapStateToProps执行后应该返回一个对象，里面的每一个键值对就是一个映射。请看下面的例子</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> mapStateToProps = <span class="function">(<span class="params">state</span>) =&gt;</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    todos:getVisibleTodos(state.todos,state.visibilityFilter)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面代码中，<code>mapStateToProps</code>是一个函数，它接受<code>state</code>作为参数，返回一个对象。这个对象有一个todos属性，代表UI组件的同名参数，<br>后面的<code>getVisibleTodos</code>也是一个函数，可以从<code>state</code>算出<code>todos</code>。<br>下面就是<code>getVisibleTodos</code>的一个例子，用来计算出<code>todos</code>。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> getVisibleTodos = <span class="function">(<span class="params">todos,filter</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">switch</span>(filter)&#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="string">'SHOW_ALL'</span>:</span><br><span class="line">     <span class="keyword">return</span> todos;</span><br><span class="line">    <span class="keyword">case</span> <span class="string">'SHOW_COMPLETED'</span>:</span><br><span class="line">     <span class="keyword">return</span> todos.filter(<span class="function"><span class="params">t</span>=&gt;</span>t.completed)</span><br><span class="line">    <span class="keyword">case</span> <span class="string">'SHOW_ACTIVE'</span>:</span><br><span class="line">     <span class="keyword">return</span> todos.filter(<span class="function"><span class="params">t</span> =&gt;</span> !t.completed)</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'unknow filter:'</span>+ filter)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>mapStateToProps</code>会订阅Store，每当<code>state</code>更新的时候就会自动执行，重新计算UI组件的参数，从而触发UI组件的重新渲染。<br><code>mapStateToProps</code>的第一个参数总是<code>state</code>对象，还可以使用第二个参数，代表容器组件的props对象。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//容器组件的代码</span></span><br><span class="line"><span class="comment">//&lt;FilterLink filter="SHOW_ALL"&gt;</span></span><br><span class="line"><span class="comment">// ALL</span></span><br><span class="line"><span class="comment">//&lt;/FilterLink&gt;</span></span><br><span class="line"><span class="keyword">const</span> mapStateToProps = <span class="function">(<span class="params">state, ownProps</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    active: ownProps.filter === state.visibilityFilter</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用<code>ownProps</code>作为参数后，如果容器组件的参数发生变化，也会引发UI组件重新渲染。<br><code>connect</code>方法可以省略<code>mapStateToProps</code>参数，那样的话，UI组件就不会订阅Store，就是说Store的更新不会引起UI组件的更新。</p>
+<h2 id="mapDispatchToProps"><a href="#mapDispatchToProps" class="headerlink" title="mapDispatchToProps()"></a>mapDispatchToProps()</h2><p><code>mapDispatchToProps</code>是<code>connect</code>函数的第二个参数，用来建立UI组件的参数到<code>store.dispatch</code>方法的映射。也就是说，它定义了哪些<br>用户的操作应当作Action，传给Store。它可以是一个函数，也可以是一个对象。<br>如果<code>mapDispatchToProps</code>是一个函数，会得到<code>dispatch</code>和<code>ownProps</code>(容器组件的<code>props</code>对象)两个参数。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> mapDispatchToProps = (</span><br><span class="line">  dispatch,</span><br><span class="line">  ownProps</span><br><span class="line">) =&gt; &#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    onClick:<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">      dispatch(&#123;</span><br><span class="line">        type:<span class="string">'SET_VISIBILITY_FILTER'</span>,</span><br><span class="line">        filter:ownProps.filter</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面代码可以看到，<code>mapDispatchToProps</code>作为函数，应该返回一个对象，该对象的每一个键值对都是一个映射，定义了UI组件的参数怎样发出Action。<br>如果<code>mapDispatchToProps</code>是一个对象，它的每一个建名也是对应UI组件的同名参数，键值应该是一个函数，会被当做Action Creator，返回的Action<br>会由Redux自动触发，举例来说，上面的<code>mapDispatchToProps</code>写成对象就是下面这样。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> mapDispatchToProps = &#123;</span><br><span class="line">  onClick:<span class="function">(<span class="params">filter</span>) =&gt;</span>&#123;</span><br><span class="line">    type:<span class="string">'SET_VISIBILITY_FILTER'</span>,</span><br><span class="line">    filter:filter</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="组件"><a href="#组件" class="headerlink" title="组件"></a><provider>组件</provider></h2><p><code>connect</code>方法生成容器组件以后，需要让容器组件拿到<code>state</code>对象，才能生成UI组件的参数。<br>一种解决方法是将<code>state</code>对象作为参数，传入容器组件。但是，这样做比较麻烦，尤其是容器组件可能在很深的层级，一级级将<code>state</code>传下去就很麻烦。<br>React-redux提供<code>Provider</code>组件，可以让容器组件拿到<code>state</code></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; Prpvider &#125; <span class="keyword">from</span> <span class="string">'react-redux'</span></span><br><span class="line"><span class="keyword">import</span> &#123; createStore &#125; <span class="keyword">from</span> <span class="string">'redux'</span></span><br><span class="line"><span class="keyword">import</span> todoApp  <span class="keyword">from</span> <span class="string">'./reducers'</span></span><br><span class="line"><span class="keyword">import</span> App <span class="keyword">from</span> <span class="string">'./components/App'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> store = createStore(todoApp);</span><br><span class="line"></span><br><span class="line">render(</span><br><span class="line">  &lt;Provider store=&#123;store&#125;&gt;</span><br><span class="line">    &lt;App/&gt;</span><br><span class="line">  &lt;<span class="regexp">/Provider&gt;,</span></span><br><span class="line"><span class="regexp">  document.getElementById('root')</span></span><br><span class="line"><span class="regexp">)</span></span><br></pre></td></tr></table></figure>
+<p>上面代码中，<code>Provider</code>在根组件外面包了一层，这样一来，<code>App</code>的所有子组件就默认都可以拿到<code>state</code>了。<br>它的原理是<code>React</code>组件的<code>context</code>属性，请看源码。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Provider</span> <span class="keyword">extends</span> <span class="title">Component</span></span>&#123;</span><br><span class="line">  getChildContext()&#123;</span><br><span class="line">    <span class="keyword">return</span>&#123;</span><br><span class="line">      store:<span class="keyword">this</span>.props.store</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;</span><br><span class="line">  render()&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.props.children;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">Provider.childContextTypes = &#123;</span><br><span class="line">  store:React.PropTypes.object</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面代码中，<code>store</code>放在了上下文对象<code>context</code>。然后，子组件就可以从<code>context</code>拿到<code>store</code>，代码大致如下。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">VisibleTodoList</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line">  componentDidMount() &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; store &#125; = <span class="keyword">this</span>.context;</span><br><span class="line">    <span class="keyword">this</span>.unsubscribe= store.subscribe(<span class="function"><span class="params">()</span> =&gt;</span></span><br><span class="line">      <span class="keyword">this</span>.forceUpdate()</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">  render()&#123;</span><br><span class="line">    <span class="keyword">const</span> props = <span class="keyword">this</span>.props;</span><br><span class="line">    <span class="keyword">const</span> &#123; store &#125; = <span class="keyword">this</span>.context;</span><br><span class="line">    <span class="keyword">const</span> state = store.getState;</span><br><span class="line">    <span class="comment">//....</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">VisibleTodoList.contextTypes = &#123;</span><br><span class="line">  store: React.PropsTypes.object</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>React-Redux</code>自动生成的容器组件代码，就类似上面这样，从而拿到<code>store</code>.</p>
+<h2 id="实例：计数器"><a href="#实例：计数器" class="headerlink" title="实例：计数器"></a>实例：计数器</h2><p>下面是一个计数器组件，它是一个纯的UI组件。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Counter</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line">  render()&#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; value, onIncreaseClick &#125; = <span class="keyword">this</span>.props</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;div&gt;</span><br><span class="line">        &lt;span&gt;&#123;vlaue&#125;&lt;<span class="regexp">/span&gt;</span></span><br><span class="line"><span class="regexp">        &lt;button onClick = &#123;onIncreaseClick&#125;&gt;Increase&lt;/</span>button&gt;</span><br><span class="line">      &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">    )</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>上面代码中，这个 UI 组件有两个参数：value和onIncreaseClick。前者需要从state计算得到，后者需要向外发出Action。<br>接着，定义<code>value</code>到<code>state</code>的映射，以及<code>onIncreaseClick</code>到<code>dispatch</code>的映射。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">mapStateToProps</span>(<span class="params">state</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    value:state.count</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">mapDispatchToProps</span>(<span class="params">dispatch</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    onIncreaseClick:<span class="function"><span class="params">()</span> =&gt;</span> dispatch(increaseAction)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//Action Creator</span></span><br><span class="line"><span class="keyword">const</span> increaseAction = &#123; <span class="attr">type</span>: <span class="string">'increase'</span> &#125;;</span><br></pre></td></tr></table></figure>
+<p>然后，使用<code>connect</code>方法生成容器组件。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> App = connect(</span><br><span class="line">  mapStateToProps,</span><br><span class="line">  mapDispatchToProps</span><br><span class="line">)(Counter)</span><br></pre></td></tr></table></figure>
+<p>然后定义这个组件的Reducer。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//reducer</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">counter</span>(<span class="params">state = &#123;count:<span class="number">0</span> &#125;, action</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">const</span> count = state.count</span><br><span class="line">  <span class="keyword">switch</span>(action.type)&#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="string">'increase'</span>:</span><br><span class="line">      <span class="keyword">return</span> &#123; <span class="attr">count</span>:count +<span class="number">1</span> &#125;</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">      <span class="keyword">return</span> state</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最后，生成<code>store</code>对象，并使用<code>Provider</code>在根组件外面包一层。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; loadState, saveState &#125; <span class="keyword">from</span> <span class="string">'./localStorage'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> persistedState = loadState();</span><br><span class="line"><span class="keyword">const</span> store = createStore(</span><br><span class="line">  todoApp,</span><br><span class="line">  persistedState</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">store.subscribe(throttle(<span class="function"><span class="params">()</span>=&gt;</span>&#123;</span><br><span class="line">  saveState(&#123;</span><br><span class="line">    todos:store.getState().todos,</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;,<span class="number">1000</span>))</span><br><span class="line"></span><br><span class="line">ReactDOM.render(</span><br><span class="line">  &lt;Provider store = &#123;store&#125;&gt;</span><br><span class="line">    &lt;App/&gt;</span><br><span class="line">  &lt;<span class="regexp">/Provider&gt;,</span></span><br><span class="line"><span class="regexp">  document.getElementById('root')  </span></span><br><span class="line"><span class="regexp">);</span></span><br></pre></td></tr></table></figure>
+<p>完整代码看<a href="https://github.com/jackielii/simplest-redux-example/blob/master/index.js" target="_blank" rel="noopener">这里</a>.</p>
+<h2 id="React-Router-路由库"><a href="#React-Router-路由库" class="headerlink" title="React-Router 路由库"></a>React-Router 路由库</h2><p>使用<code>React-Router</code>的项目，与其他项目没有不同之处，也是使用<code>Provider</code>在<code>Router</code>外面包一层，毕竟<code>Provider</code>的唯一功能就是传入<code>store</code>对象。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> Root = <span class="function">(<span class="params">&#123; store &#125;</span>) =&gt;</span>(</span><br><span class="line">  &lt;Provider store=&#123; store &#125;&gt;</span><br><span class="line">    &lt;Router&gt;</span><br><span class="line">      &lt;Route path=<span class="string">'/'</span> component=&#123;App&#125;/&gt;</span><br><span class="line">    &lt;<span class="regexp">/Router&gt;</span></span><br><span class="line"><span class="regexp">  &lt;/</span>Provider&gt;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/react/" rel="tag"># react</a>
+          
+            <a href="/tags/redux/" rel="tag"># redux</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/04/react-tips/" rel="next" title="react tips">
+                <i class="fa fa-chevron-left"></i> react tips
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/17/JS-OffsetParent属性深入解析/" rel="prev" title="JS OffsetParent属性深入解析">
+                JS OffsetParent属性深入解析 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div class="ds-thread" data-thread-key="2017/03/10/redux学习笔记/"
+           data-title="redux学习笔记" data-url="http://fsysfq.top/2017/03/10/redux学习笔记/">
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">石富全</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">26</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/sivkun" target="_blank" title="myGitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>myGitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://fex.baidu.com" target="_blank" title="百度FEX">
+                      
+                        <i class="fa fa-fw fa-fex.baidu"></i>百度FEX</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://taobaofed.org" target="_blank" title="淘宝FED">
+                      
+                        <i class="fa fa-fw fa-taobaofed"></i>淘宝FED</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://www.alloyteam.com/" target="_blank" title="alloyteam">
+                      
+                        <i class="fa fa-fw fa-alloyteam"></i>alloyteam</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://www.cnblogs.com/sivkun/" target="_blank" title="我的博客园">
+                      
+                        <i class="fa fa-fw fa-cnblogs"></i>我的博客园</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Redux"><span class="nav-number">1.</span> <span class="nav-text">Redux</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#设计思想："><span class="nav-number">1.1.</span> <span class="nav-text">设计思想：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基本概念和API"><span class="nav-number">1.2.</span> <span class="nav-text">基本概念和API</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Store的实现。"><span class="nav-number">2.</span> <span class="nav-text">Store的实现。</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reducer的拆分"><span class="nav-number">3.</span> <span class="nav-text">Reducer的拆分</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#工作流"><span class="nav-number">3.1.</span> <span class="nav-text">工作流</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Redux-入门教程（二）：中间件与异步操作"><span class="nav-number">4.</span> <span class="nav-text">Redux 入门教程（二）：中间件与异步操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#中间件的概念"><span class="nav-number">4.1.</span> <span class="nav-text">中间件的概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#中间件的用法"><span class="nav-number">4.2.</span> <span class="nav-text">中间件的用法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#异步操作的基本思路"><span class="nav-number">4.3.</span> <span class="nav-text">异步操作的基本思路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#redux-thunk-中间件"><span class="nav-number">4.4.</span> <span class="nav-text">redux-thunk 中间件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#redux-promise中间件"><span class="nav-number">4.5.</span> <span class="nav-text">redux-promise中间件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#React-Redux-的用法"><span class="nav-number">5.</span> <span class="nav-text">React-Redux 的用法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#UI组件"><span class="nav-number">5.1.</span> <span class="nav-text">UI组件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#connect"><span class="nav-number">5.2.</span> <span class="nav-text">connect()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mapStateToProps"><span class="nav-number">5.3.</span> <span class="nav-text">mapStateToProps()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mapDispatchToProps"><span class="nav-number">5.4.</span> <span class="nav-text">mapDispatchToProps()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#组件"><span class="nav-number">5.5.</span> <span class="nav-text">组件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实例：计数器"><span class="nav-number">5.6.</span> <span class="nav-text">实例：计数器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#React-Router-路由库"><span class="nav-number">5.7.</span> <span class="nav-text">React-Router 路由库</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">石富全</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"discussinfo"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

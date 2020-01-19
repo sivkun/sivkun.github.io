@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="react,模式," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="sivkun" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="分享很好的一篇文章，原文链接：https://github.com/krasimir/react-in-patterns/tree/master/patterns/dependency-injection  React in patterns / Dependency injection Source code using React’s context Source code using mo">
+<meta name="keywords" content="react,模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="react-dependency-injection">
+<meta property="og:url" content="http://fsysfq.top/2017/07/02/react-dependency-injection/index.html">
+<meta property="og:site_name" content="sivkun">
+<meta property="og:description" content="分享很好的一篇文章，原文链接：https://github.com/krasimir/react-in-patterns/tree/master/patterns/dependency-injection  React in patterns / Dependency injection Source code using React’s context Source code using mo">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-07-07T13:18:26.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="react-dependency-injection">
+<meta name="twitter:description" content="分享很好的一篇文章，原文链接：https://github.com/krasimir/react-in-patterns/tree/master/patterns/dependency-injection  React in patterns / Dependency injection Source code using React’s context Source code using mo">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://fsysfq.top/2017/07/02/react-dependency-injection/"/>
+
+
+
+
+
+  <title>react-dependency-injection | sivkun</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">sivkun</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">follow your heart</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://fsysfq.top/2017/07/02/react-dependency-injection/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="石富全">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="sivkun">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">react-dependency-injection</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-02T23:27:36+08:00">
+                2017-07-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/web/" itemprop="url" rel="index">
+                    <span itemprop="name">web</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/web/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/07/02/react-dependency-injection/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/07/02/react-dependency-injection/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>分享很好的一篇文章，原文链接：<a href="https://github.com/krasimir/react-in-patterns/tree/master/patterns/dependency-injection" target="_blank" rel="noopener">https://github.com/krasimir/react-in-patterns/tree/master/patterns/dependency-injection</a></p>
+</blockquote>
+<h2 id="React-in-patterns-Dependency-injection"><a href="#React-in-patterns-Dependency-injection" class="headerlink" title="React in patterns / Dependency injection"></a><a href="../../README.md">React in patterns</a> / Dependency injection</h2><ul>
+<li><a href="https://github.com/krasimir/react-in-patterns/tree/master/patterns/dependency-injection/src" target="_blank" rel="noopener">Source code using React’s context</a></li>
+<li><a href="https://github.com/krasimir/react-in-patterns/tree/master/patterns/dependency-injection-module-system/src" target="_blank" rel="noopener">Source code using module system</a></li>
+</ul>
+<hr>
+<p>Big part of the modules/components that we write have dependencies. A proper management of these dependencies is critical for the success of the project. There is a technique (some people consider it as a <em>pattern</em>) called <a href="http://krasimirtsonev.com/blog/article/Dependency-injection-in-JavaScript" target="_blank" rel="noopener"><em>dependency injection</em></a> that helps solving the problem.</p>
+<p>In React the need of dependency injector is easily visible. Let’s consider the following application tree:<br><a id="more"></a><br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Title.jsx</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="function"><span class="keyword">function</span> <span class="title">Title</span>(<span class="params">props</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> &lt;h1&gt;&#123; props.title &#125;&lt;/h1&gt;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// -----------------------------------</span></span><br><span class="line"><span class="comment">// Header.jsx</span></span><br><span class="line"><span class="keyword">import</span> Title <span class="keyword">from</span> <span class="string">'./Title.jsx'</span>;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="function"><span class="keyword">function</span> <span class="title">Header</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    &lt;header&gt;</span><br><span class="line">      &lt;Title /&gt;</span><br><span class="line">    &lt;<span class="regexp">/header&gt;</span></span><br><span class="line"><span class="regexp">  );</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">/</span><span class="regexp">/ -----------------------------------</span></span><br><span class="line"><span class="regexp">/</span><span class="regexp">/ App.jsx</span></span><br><span class="line"><span class="regexp">import Header from './</span>Header.jsx<span class="string">';</span></span><br><span class="line"><span class="string">class App extends React.Component &#123;</span></span><br><span class="line"><span class="string">  constructor(props) &#123;</span></span><br><span class="line"><span class="string">    super(props);</span></span><br><span class="line"><span class="string">    this.state = &#123; title: '</span>React <span class="keyword">in</span> patterns<span class="string">' &#125;;</span></span><br><span class="line"><span class="string">  &#125;</span></span><br><span class="line"><span class="string">  render() &#123;</span></span><br><span class="line"><span class="string">    return &lt;Header /&gt;;</span></span><br><span class="line"><span class="string">  &#125;</span></span><br><span class="line"><span class="string">&#125;;</span></span><br></pre></td></tr></table></figure></p>
+<p>The string “React in patterns” should somehow reach the <code>Title</code> component. The direct way of doing this is to pass it from <code>App</code> to <code>Header</code> and then <code>Header</code> to pass it to <code>Title</code>. However, this may work for these three components but what happens if there are multiple properties and deeper nesting. Lots of components will have to mention properties that they are not interested in. It is clear that most React components receive their dependencies via props but the question is how these dependencies reach that point.</p>
+<p>We already saw how the <a href="https://github.com/krasimir/react-in-patterns/tree/master/patterns/higher-order-components" target="_blank" rel="noopener">higher-order component</a> may be used to inject data. Let’s use the same technique to inject the <code>title</code> variable:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// inject.jsx</span></span><br><span class="line"><span class="keyword">var</span> title = <span class="string">'React in patterns'</span>;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="function"><span class="keyword">function</span> <span class="title">inject</span>(<span class="params">Component</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="class"><span class="keyword">class</span> <span class="title">Injector</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">    render() &#123;</span><br><span class="line">      <span class="keyword">return</span> (</span><br><span class="line">        &lt;Component</span><br><span class="line">          &#123;...this.state&#125;</span><br><span class="line">          &#123;...this.props&#125;</span><br><span class="line">          title=&#123; title &#125;</span><br><span class="line">        /&gt;</span><br><span class="line">      )</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// -----------------------------------</span></span><br><span class="line"><span class="comment">// Header.jsx</span></span><br><span class="line"><span class="keyword">import</span> inject <span class="keyword">from</span> <span class="string">'./inject.jsx'</span>;</span><br><span class="line"><span class="keyword">import</span> Title <span class="keyword">from</span> <span class="string">'./Title.jsx'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> EnhancedTitle = inject(Title);</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="function"><span class="keyword">function</span> <span class="title">Header</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    &lt;header&gt;</span><br><span class="line">      &lt;EnhancedTitle /&gt;</span><br><span class="line">    &lt;<span class="regexp">/header&gt;</span></span><br><span class="line"><span class="regexp">  );</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>The <code>title</code> is hidden in a middle layer (higher-order component) where we pass it as a prop to the original <code>Title</code> component. That’s all nice but it solves only half of the problem. Now we don’t have to pass the <code>title</code> down the tree but how this data will reach the <code>enhance.jsx</code> helper.</p>
+<h2 id="Using-React’s-context"><a href="#Using-React’s-context" class="headerlink" title="Using React’s context"></a>Using React’s context</h2><p>React has the concept of <a href="https://facebook.github.io/react/docs/context.html" target="_blank" rel="noopener"><em>context</em></a>. The <em>context</em> is something that every component may have access to. It’s something like an <a href="https://github.com/krasimir/EventBus" target="_blank" rel="noopener">event bus</a> but for data. A single model which we can access from everywhere.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// a place where we'll define the context</span></span><br><span class="line"><span class="keyword">var</span> context = &#123; <span class="attr">title</span>: <span class="string">'React in patterns'</span> &#125;;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  getChildContext() &#123;</span><br><span class="line">    <span class="keyword">return</span> context;</span><br><span class="line">  &#125;</span><br><span class="line">  ...</span><br><span class="line">&#125;;</span><br><span class="line">App.childContextTypes = &#123;</span><br><span class="line">  title: React.PropTypes.string</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// a place where we need data</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Inject</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">var</span> title = <span class="keyword">this</span>.context.title;</span><br><span class="line">    ...</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">Inject.contextTypes = &#123;</span><br><span class="line">  title: React.PropTypes.string</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>Notice that we have to specify the exact signature of the context object. With <code>childContextTypes</code> and <code>contextTypes</code>. If those are not specified then the <code>context</code> object will be empty. That may be a little bit frustrating because we may have lots of stuff to put there. That’s why it is a good practice that our <code>context</code> is not just a plain object but it has an interface that allows us to store and retrieve data. For example:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// dependencies.js</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  data: &#123;&#125;,</span><br><span class="line">  get(key) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.data[key];</span><br><span class="line">  &#125;,</span><br><span class="line">  register(key, value) &#123;</span><br><span class="line">    <span class="keyword">this</span>.data[key] = value;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Then, if we go back to our example, the very top <code>App</code> component may look like that:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> dependencies <span class="keyword">from</span> <span class="string">'./dependencies'</span>;</span><br><span class="line"></span><br><span class="line">dependencies.register(<span class="string">'title'</span>, <span class="string">'React in patterns'</span>);</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  getChildContext() &#123;</span><br><span class="line">    <span class="keyword">return</span> dependencies;</span><br><span class="line">  &#125;</span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">return</span> &lt;Header /&gt;;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line">App.childContextTypes = &#123;</span><br><span class="line">  data: React.PropTypes.object,</span><br><span class="line">  get: React.PropTypes.func,</span><br><span class="line">  register: React.PropTypes.func</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>And our <code>Title</code> component gets it’s data through the context:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Title.jsx</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="class"><span class="keyword">class</span> <span class="title">Title</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">return</span> &lt;h1&gt;&#123; this.context.get('title') &#125;&lt;/h1&gt;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">Title.contextTypes = &#123;</span><br><span class="line">  data: React.PropTypes.object,</span><br><span class="line">  get: React.PropTypes.func,</span><br><span class="line">  register: React.PropTypes.func</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>Ideally we don’t want to specify the <code>contextTypes</code> every time when we need an access to the context. This detail may be wrapped in a higher-order component. And even more, we may write an utility function that is more descriptive and helps us declare the exact wiring. I.e instead of accessing the context directly with <code>this.context.get(&#39;title&#39;)</code> we ask the higher-order component to get what we need and to pass it as a prop to our component. For example:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Title.jsx</span></span><br><span class="line"><span class="keyword">import</span> wire <span class="keyword">from</span> <span class="string">'./wire'</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Title</span>(<span class="params">props</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> &lt;h1&gt;&#123; props.title &#125;&lt;/h1&gt;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> wire(Title, [<span class="string">'title'</span>], <span class="function"><span class="keyword">function</span> <span class="title">resolve</span>(<span class="params">title</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> &#123; title &#125;;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>The <code>wire</code> function accepts first a React component, then an array with all the needed dependencies (which are <code>register</code>ed already) and then a function which I like to call <code>mapper</code>. It receives what’s stored in the context as a raw data and returns an object which is the actual React props for our component (<code>Title</code>). In this example we just pass what we get - a <code>title</code> string variable. However, in a real app this could be a collection of data stores, configuration or something else. So, it’s nice that we pass exactly what we need and don’t pollute the components with data that they don’t need.</p>
+<p>Here is how the <code>wire</code> function looks like:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="function"><span class="keyword">function</span> <span class="title">wire</span>(<span class="params">Component, dependencies, mapper</span>) </span>&#123;</span><br><span class="line">  <span class="class"><span class="keyword">class</span> <span class="title">Inject</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">    render() &#123;</span><br><span class="line">      <span class="keyword">var</span> resolved = dependencies.map(<span class="keyword">this</span>.context.get.bind(<span class="keyword">this</span>.context));</span><br><span class="line">      <span class="keyword">var</span> props = mapper(...resolved);</span><br><span class="line"></span><br><span class="line">      <span class="keyword">return</span> React.createElement(Component, props);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  Inject.contextTypes = &#123;</span><br><span class="line">    data: React.PropTypes.object,</span><br><span class="line">    get: React.PropTypes.func,</span><br><span class="line">    register: React.PropTypes.func</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="keyword">return</span> Inject;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p><code>Inject</code> is a higher-order component that gets access to the context and retrieves all the items listed under <code>dependencies</code> array. The <code>mapper</code> is a function receiving the <code>context</code> data and transforms it to props for our component.</p>
+<p>At the end of this section we should mention that the usage of <code>context</code> is not highly recommended by Facebook:</p>
+<blockquote>
+<p>Context is an advanced and experimental feature. The API is likely to change in future releases.</p>
+</blockquote>
+<blockquote>
+<p>Most applications will never need to use context. Especially if you are just getting started with React, you likely do not want to use context. Using context will make your code harder to understand because it makes the data flow less clear. It is similar to using global variables to pass state through your application.</p>
+</blockquote>
+<blockquote>
+<p>If you have to use context, use it sparingly.</p>
+</blockquote>
+<blockquote>
+<p>Regardless of whether you’re building an application or a library, try to isolate your use of context to a small area and avoid using the context API directly when possible so that it’s easier to upgrade when the API changes.</p>
+</blockquote>
+<h2 id="Using-the-module-system"><a href="#Using-the-module-system" class="headerlink" title="Using the module system"></a>Using the module system</h2><p>If we don’t want to use the context there are a couple of other ways to achieve the injection. They are not exactly React specific but worth mentioning. One of them is using the module system.</p>
+<p>As we know the typical module system in JavaScript has a caching mechanism. It’s nicely noted in the <a href="https://nodejs.org/api/modules.html#modules_caching" target="_blank" rel="noopener">Node’s documentation</a>:</p>
+<blockquote>
+<p>Modules are cached after the first time they are loaded. This means (among other things) that every call to require(‘foo’) will get exactly the same object returned, if it would resolve to the same file.</p>
+</blockquote>
+<blockquote>
+<p>Multiple calls to require(‘foo’) may not cause the module code to be executed multiple times. This is an important feature. With it, “partially done” objects can be returned, thus allowing transitive dependencies to be loaded even when they would cause cycles.</p>
+</blockquote>
+<p>How’s that helping for our injection? Well, if we export an object we are actually exporting a <a href="https://addyosmani.com/resources/essentialjsdesignpatterns/book/#singletonpatternjavascript" target="_blank" rel="noopener">singleton</a> and every other module that imports the file will get the same object. This allows us to <code>register</code> our dependencies and later <code>fetch</code> them in another file.</p>
+<p>Let’s create a new file called <code>di.jsx</code> with the following content:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> dependencies = &#123;&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">register</span>(<span class="params">key, dependency</span>) </span>&#123;</span><br><span class="line">  dependencies[key] = dependency;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">fetch</span>(<span class="params">key</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (dependencies[key]) <span class="keyword">return</span> dependencies[key];</span><br><span class="line">  <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">`"<span class="subst">$&#123; key &#125;</span> is not registered as dependency.`</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">wire</span>(<span class="params">Component, deps, mapper</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="class"><span class="keyword">class</span> <span class="title">Injector</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">    <span class="keyword">constructor</span>(props) &#123;</span><br><span class="line">      <span class="keyword">super</span>(props);</span><br><span class="line">      <span class="keyword">this</span>._resolvedDependencies = mapper(...deps.map(fetch));</span><br><span class="line">    &#125;</span><br><span class="line">    render() &#123;</span><br><span class="line">      <span class="keyword">return</span> (</span><br><span class="line">        &lt;Component</span><br><span class="line">          &#123;...this.state&#125;</span><br><span class="line">          &#123;...this.props&#125;</span><br><span class="line">          &#123;...this._resolvedDependencies&#125;</span><br><span class="line">        /&gt;</span><br><span class="line">      );</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>We’ll store the dependencies in <code>dependencies</code> global variable (it’s global for our module, not at an application level). We then export two functions <code>register</code> and <code>fetch</code> that write and read entries. It looks a little bit like implementing setter and getter against a simple JavaScript object. Then we have the <code>wire</code> function that accepts our React component and returns a <a href="https://github.com/krasimir/react-in-patterns/tree/master/patterns/higher-order-components" target="_blank" rel="noopener">higher-order component</a>. In the constructor of that component we are resolving the dependencies and later while rendering the original component we pass them as props. We follow the same pattern where we describe what we need (<code>deps</code> argument) and extract the needed props with a <code>mapper</code> function.</p>
+<p>Having the <code>di.jsx</code> helper we are again able to register our dependencies at the entry point of our application (<code>app.jsx</code>) and inject them wherever (<code>Title.jsx</code>) we need.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// app.jsx</span></span><br><span class="line"><span class="keyword">import</span> Header <span class="keyword">from</span> <span class="string">'./Header.jsx'</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; register &#125; <span class="keyword">from</span> <span class="string">'./di.jsx'</span>;</span><br><span class="line"></span><br><span class="line">register(<span class="string">'my-awesome-title'</span>, <span class="string">'React in patterns'</span>);</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">return</span> &lt;Header /&gt;;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">// -----------------------------------</span><br><span class="line">// Header.jsx</span><br><span class="line">import Title from './Title.jsx';</span><br><span class="line"></span><br><span class="line">export default function Header() &#123;</span><br><span class="line">  return (</span><br><span class="line">    &lt;header&gt;</span><br><span class="line">      &lt;Title /&gt;</span><br><span class="line">    &lt;/header&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// -----------------------------------</span><br><span class="line">// Title.jsx</span><br><span class="line">import &#123; wire &#125; from './di.jsx';</span><br><span class="line"></span><br><span class="line">var Title = function(props) &#123;</span><br><span class="line">  return &lt;h1&gt;&#123; props.title &#125;&lt;/h1&gt;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">export default wire(Title, ['my-awesome-title'], title =&gt; (&#123; title &#125;));</span><br></pre></td></tr></table></figure>
+<p>If we look at the <code>Title.jsx</code> file we’ll see that the actual component and the wiring may live in different files. That way the component and the mapper function become easily unit testable.</p>
+<h2 id="Injecting-with-the-help-of-a-build-process"><a href="#Injecting-with-the-help-of-a-build-process" class="headerlink" title="Injecting with the help of a build process"></a>Injecting with the help of a build process</h2><p>We are all processing our JavaScript before shipping it to the browser. This biggest benefit of having an intermediate process is the ability to add features which are normally not there. Like for example the support of <a href="http://krasimirtsonev.com/blog/article/constructive-destructuring-es6-assignment" target="_blank" rel="noopener">ES6 destructuring</a> with <a href="http://babeljs.io/" target="_blank" rel="noopener">Babel</a> or static type checking with <a href="https://flowtype.org/" target="_blank" rel="noopener">Flow</a>. There are tools for dependency injection too. <a href="https://github.com/inversify/InversifyJS" target="_blank" rel="noopener">InversifyJS</a> is one of them and in the next section we will see how it works with React components.</p>
+<h3 id="Dependency-injection-powered-by-an-IoC-container"><a href="#Dependency-injection-powered-by-an-IoC-container" class="headerlink" title="Dependency injection powered by an IoC container"></a>Dependency injection powered by an IoC container</h3><p>Not long ago an user in Twitter asked <a href="https://twitter.com/mweststrate" target="_blank" rel="noopener">Michel Weststrate</a>(the author of <a href="https://github.com/mobxjs/mobx" target="_blank" rel="noopener">MobX</a>) the following:</p>
+<blockquote>
+<p>How safe is it to use mobx-react <provider>? Or are there any other options for connecting stores to components without passing them explicitly through each component?</provider></p>
+</blockquote>
+<p>The <a href="https://twitter.com/mweststrate/status/750267384926208000" target="_blank" rel="noopener">answer</a> was the following:</p>
+<blockquote>
+<p>Dependency injection like InversifyJS also works nicely</p>
+</blockquote>
+<p><a href="https://github.com/inversify/InversifyJS" target="_blank" rel="noopener">InversifyJS</a> is an IoC container. We can use an IoC container to inject a value into React components without passing it explicitly through each component and without using the context.</p>
+<p>In this demonstration we are going to use InversifyJS and <a href="https://github.com/Microsoft/TypeScript" target="_blank" rel="noopener">TypeScript</a>. We are using InversifyJS because it works in both Node.js and web browsers. This is an important feature because some React applications use server-side rendering. We are also using TypeScript because it is the recommended by InversifyJS.</p>
+<p>InversifyJS supports two kinds of injections:</p>
+<ul>
+<li>Constructor injection</li>
+<li>Property injection</li>
+</ul>
+<p>In order to use “constructor injection” the IoC container needs to be able to create the instances of the classes. In React the components sometimes are just functions (not classes) and we can’t delegate the creation of the instances of the components to the IoC container. This means that <strong>constructor injection powered by IoC containers don’t play nicely with React</strong></p>
+<p>However, <strong>property injection works just fine</strong> considering the fact that we want to pass dependencies to components without passing them explicitly through each component.</p>
+<p>Let’s take a look to a basic example.</p>
+<p>We need to start by configuring the IoC container. In InversifyJs we need to create a dictionary that maps a type identifier with a type. The dictionary entries are known as “type bindings”.</p>
+<p>In this case, we are binding the identifier <code>UserStore</code> to the class <code>UserStore</code>. This time the identifier is a Class but InversifyJS also allows us to use <code>Symbols</code> or string literals as identifiers. Symbols or string literals are required when we use interfaces.</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; Kernel, makePropertyInjectDecorator &#125; <span class="keyword">from</span> <span class="string">"inversify"</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; UserStore &#125; <span class="keyword">from</span> <span class="string">"./store/user"</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="string">"reflect-metadata"</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> kernel = <span class="keyword">new</span> Kernel();</span><br><span class="line">kernel.bind&lt;UserStore&gt;(UserStore).to(UserStore);</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> pInject = makePropertyInjectDecorator(kernel);</span><br><span class="line"><span class="keyword">export</span> &#123; kernel, pInject &#125;;</span><br></pre></td></tr></table></figure>
+<p>We also need to generate a decorator using the function <code>makePropertyInjectDecorator</code>.</p>
+<p>The generated <code>pInject</code> decorator allows us to flag the properties of a class that we want to be injected:</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; pInject &#125; <span class="keyword">from</span> <span class="string">"./utils/di"</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; UserStore &#125; <span class="keyword">from</span> <span class="string">"./store/user"</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> User <span class="keyword">extends</span> React.Component&lt;<span class="built_in">any</span>, <span class="built_in">any</span>&gt; &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@pInject</span>(UserStore)</span><br><span class="line">    <span class="keyword">private</span> userStore: UserStore;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> render() &#123;</span><br><span class="line">        <span class="keyword">return</span> (</span><br><span class="line">            &lt;h1&gt;&#123;<span class="keyword">this</span>.userStore.pageTitle&#125;&lt;<span class="regexp">/h1&gt;</span></span><br><span class="line"><span class="regexp">        );</span></span><br><span class="line"><span class="regexp">    &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>Injected properties are <em>lazy evaluated</em>. This means that the value of the <code>userStore</code> property is only set after we try to access it for the first time.</p>
+<p>Based on the <a href="https://facebook.github.io/react/docs/context.html" target="_blank" rel="noopener">React docs</a> we should try to avoid using context:</p>
+<p>The main advantage of using an IoC container like InversifyJS is that <strong>we are not using the context</strong>!</p>
+<p>InversifyJS is also great for testing because we can declare a new bindings and inject a mock or stub instead of a real value:</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kernel.bind&lt;UserStore&gt;(UserStore).toConstantValue(&#123; pageTitle: <span class="string">"Some text for testing..."</span> &#125;);</span><br></pre></td></tr></table></figure>
+<p>Find some real use cases of InversifyJS with React <a href="https://github.com/Mercateo/dwatch/blob/master/app/src/components/site/LocaleSwitcher.tsx#L12" target="_blank" rel="noopener">here</a> and <a href="https://github.com/Mercateo/dwatch/blob/master/app/src/components/site/Header.tsx#L14" target="_blank" rel="noopener">here</a> or learn more about InversifyJS at the official repository <a href="https://github.com/inversify/InversifyJS" target="_blank" rel="noopener">here</a>.</p>
+<h3 id="Final-thoughts"><a href="#Final-thoughts" class="headerlink" title="Final thoughts"></a>Final thoughts</h3><p>Dependency injection is a tough problem. Especially in JavaScript. It’s not really an issue within React application but appears everywhere. At the time of this writing React offers only the <code>context</code> as an instrument for resolving dependencies. As we mentioned above this technique should be used sparingly. And of course there are some alternatives. For example using the module system or libraries like InversifyJS.</p>
+<h3 id="Other-resources-related-to-dependency-injection"><a href="#Other-resources-related-to-dependency-injection" class="headerlink" title="Other resources related to dependency injection"></a>Other resources related to dependency injection</h3><ul>
+<li><a href="https://medium.com/@marziosuperina/level-up-your-dependencies-in-react-part-1-d67bb2711b51" target="_blank" rel="noopener">Level-up your dependencies in React </a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/react/" rel="tag"># react</a>
+          
+            <a href="/tags/模式/" rel="tag"># 模式</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/01/selection-and-popover/" rel="next" title="selection-and-popover">
+                <i class="fa fa-chevron-left"></i> selection-and-popover
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/07/09/regExp-and-example/" rel="prev" title="regExp-and-example">
+                regExp-and-example <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div class="ds-thread" data-thread-key="2017/07/02/react-dependency-injection/"
+           data-title="react-dependency-injection" data-url="http://fsysfq.top/2017/07/02/react-dependency-injection/">
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">石富全</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">26</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/sivkun" target="_blank" title="myGitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>myGitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://fex.baidu.com" target="_blank" title="百度FEX">
+                      
+                        <i class="fa fa-fw fa-fex.baidu"></i>百度FEX</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://taobaofed.org" target="_blank" title="淘宝FED">
+                      
+                        <i class="fa fa-fw fa-taobaofed"></i>淘宝FED</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://www.alloyteam.com/" target="_blank" title="alloyteam">
+                      
+                        <i class="fa fa-fw fa-alloyteam"></i>alloyteam</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://www.cnblogs.com/sivkun/" target="_blank" title="我的博客园">
+                      
+                        <i class="fa fa-fw fa-cnblogs"></i>我的博客园</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#React-in-patterns-Dependency-injection"><span class="nav-number">1.</span> <span class="nav-text">React in patterns / Dependency injection</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Using-React’s-context"><span class="nav-number">2.</span> <span class="nav-text">Using React’s context</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Using-the-module-system"><span class="nav-number">3.</span> <span class="nav-text">Using the module system</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Injecting-with-the-help-of-a-build-process"><span class="nav-number">4.</span> <span class="nav-text">Injecting with the help of a build process</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Dependency-injection-powered-by-an-IoC-container"><span class="nav-number">4.1.</span> <span class="nav-text">Dependency injection powered by an IoC container</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Final-thoughts"><span class="nav-number">4.2.</span> <span class="nav-text">Final thoughts</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Other-resources-related-to-dependency-injection"><span class="nav-number">4.3.</span> <span class="nav-text">Other resources related to dependency injection</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">石富全</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"discussinfo"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

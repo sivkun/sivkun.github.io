@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="http," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="sivkun" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="Get和Post方法区别Http协议定义了很多与服务器交互的方法，最基本的有4种，分别是GET,POST,PUT,DELETE. 一个URL地址用于描述一个网络上的资源，而HTTP中的GET, POST, PUT, DELETE就对应着对这个资源的查，改，增，删4个操作。 我们最常见的就是GET和POST了。GET一般用于获取/查询资源信息，而POST一般用于更新资源信息.  GET提交的数据会放">
+<meta name="keywords" content="http">
+<meta property="og:type" content="article">
+<meta property="og:title" content="http总结">
+<meta property="og:url" content="http://fsysfq.top/2017/07/01/http总结/index.html">
+<meta property="og:site_name" content="sivkun">
+<meta property="og:description" content="Get和Post方法区别Http协议定义了很多与服务器交互的方法，最基本的有4种，分别是GET,POST,PUT,DELETE. 一个URL地址用于描述一个网络上的资源，而HTTP中的GET, POST, PUT, DELETE就对应着对这个资源的查，改，增，删4个操作。 我们最常见的就是GET和POST了。GET一般用于获取/查询资源信息，而POST一般用于更新资源信息.  GET提交的数据会放">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-07-07T13:18:26.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="http总结">
+<meta name="twitter:description" content="Get和Post方法区别Http协议定义了很多与服务器交互的方法，最基本的有4种，分别是GET,POST,PUT,DELETE. 一个URL地址用于描述一个网络上的资源，而HTTP中的GET, POST, PUT, DELETE就对应着对这个资源的查，改，增，删4个操作。 我们最常见的就是GET和POST了。GET一般用于获取/查询资源信息，而POST一般用于更新资源信息.  GET提交的数据会放">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://fsysfq.top/2017/07/01/http总结/"/>
+
+
+
+
+
+  <title>http总结 | sivkun</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">sivkun</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">follow your heart</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://fsysfq.top/2017/07/01/http总结/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="石富全">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="sivkun">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">http总结</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-01T21:52:52+08:00">
+                2017-07-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/协议/" itemprop="url" rel="index">
+                    <span itemprop="name">协议</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/07/01/http总结/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/07/01/http总结/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Get和Post方法区别"><a href="#Get和Post方法区别" class="headerlink" title="Get和Post方法区别"></a>Get和Post方法区别</h1><p>Http协议定义了很多与服务器交互的方法，最基本的有4种，分别是GET,POST,PUT,DELETE. 一个URL地址用于描述一个网络上的资源，而HTTP中的GET, POST, PUT, DELETE就对应着对这个资源的查，改，增，删4个操作。 我们最常见的就是GET和POST了。GET一般用于获取/查询资源信息，而POST一般用于更新资源信息.</p>
+<ol>
+<li>GET提交的数据会放在URL之后，以?分割URL和传输数据，参数之间以&amp;相连。如userInfo.php?id=17065&amp;name=test.POST方法是把提交的数据放在HTTP包的Body中。</li>
+<li>GET提交的数据大小有限制（因为浏览器URL的长度有限制），而POST方法提交的数据没有限制。</li>
+<li>GET方式提交数据会有安全问题。</li>
+</ol>
+<h1 id="Cache-Control"><a href="#Cache-Control" class="headerlink" title="Cache-Control"></a>Cache-Control</h1><blockquote>
+<p><a href="http://mp.weixin.qq.com/s/tluGR6Xc2tCjtaOLWO9q6Q" target="_blank" rel="noopener">http://mp.weixin.qq.com/s/tluGR6Xc2tCjtaOLWO9q6Q</a><br><a href="http://www.cnblogs.com/wakey/p/4241516.html" target="_blank" rel="noopener">http://www.cnblogs.com/wakey/p/4241516.html</a></p>
+</blockquote>
+<p>Cache-Control即可以用于请求头，也可以用于响应头。响应头是重点掌握内容。<br>它控制着两个缓存：本地缓存（私有缓存）和共享缓存。<br>本地缓存，是指在客户端本地机器中的缓存。站在开发者的角度，它并不完全受你的控制，通常浏览器会自己决定是否把某些内容放到缓存中，这意味着：不要依赖于本地缓存。<br>共享缓存，处于客户端和服务器之间的缓存。即 CDN。你对共享缓存拥有绝对的控制，应该好好地利用它。<br><a id="more"></a><br>Cache-Control有三种属性：缓冲能力、过期时间和二次验证<br>首先是缓冲能力，它关注的是缓存到什么地方，和是否应该被缓存。他的几个重要的属性是：</p>
+<ul>
+<li>private:表示它只应该存在本地缓存</li>
+<li>public:表示它既可以存在共享缓存，也可以被存在本地缓存</li>
+<li>no-cache:表示不论是本地缓存还是共享缓存，在使用它以前必须用缓存里的值重新验证。</li>
+<li>no-store:表示不允许被缓存<br>第二个是过期时间，很显然它关注的是内容可以被缓存多久。它的几个重要的属性是：</li>
+<li><code>max-age = &lt;seconds&gt;</code>:设置缓存时间，单位为秒。本地和共享可以使用。</li>
+<li><code>s-maxage = &lt;seconds&gt;</code>:覆盖<code>max-age</code>属性。只在共享缓存中起作用。<br>最后一个是二次验证，表示精细控制。它的几个重要属性是：</li>
+<li>immutable:表示文档是不能更改的。</li>
+<li>must-revalidate:表示客户端必须检查代理服务器上是否存在，即时已经本地缓存了也要检查。</li>
+<li>proxy-revalidata:表示共享缓存必须要检查源是否存在，即使已经有缓存。<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Cache-Control: public max-age=<span class="number">3600</span></span><br><span class="line">Cache-Control: private immutable</span><br><span class="line">Cache-Control: no-cache</span><br><span class="line">Cache-Control: public max-age=<span class="number">3600</span> s-maxage=<span class="number">7200</span></span><br><span class="line">Cache-Control: public max-age=<span class="number">3600</span> proxy-revalidate</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>上面的意思：</p>
+<ol>
+<li>本地缓存和 CDN 缓存均缓存 1 小时；</li>
+<li>不能缓存在 CDN，只能缓存在本地。并且一旦被缓存了，则不能被更新；</li>
+<li>不能缓存。如果一定要缓存的话，确保对其进行了二次验证；</li>
+<li>本地缓存 1 小时，CDN 上缓存 2 小时；</li>
+<li>本地和 CDN 均缓存 1 小时。但是如果 CDN 收到请求，则尽管已经缓存了 1 小时，还是要检查源中文档是否已经被改变。</li>
+</ol>
+<h1 id="ETag"><a href="#ETag" class="headerlink" title="ETag"></a>ETag</h1><p>ETag是实体标签（Entity Tag）的缩写， 根据实体内容生成的一段hash字符串（类似于MD5或者SHA1之后的结果），可以标识资源的状态。 当资源发送改变时，ETag也随之发生变化。<br>ETag是Web服务端产生的，然后发给浏览器客户端。浏览器客户端是不用关心Etag是如何产生的。<br>为什么使用ETag呢？ 主要是为了解决Last-Modified 无法解决的一些问题。</p>
+<ol>
+<li>某些服务器不能精确得到文件的最后修改时间， 这样就无法通过最后修改时间来判断文件是否更新了。</li>
+<li>某些文件的修改非常频繁，在秒以下的时间内进行修改. Last-Modified只能精确到秒。</li>
+<li>一些文件的最后修改时间改变了，但是内容并未改变。 我们不希望客户端认为这个文件修改了。</li>
+</ol>
+<h1 id="浏览器不使用缓存"><a href="#浏览器不使用缓存" class="headerlink" title="浏览器不使用缓存"></a>浏览器不使用缓存</h1><p>CTRL+F5强制刷新浏览器，或者设置IE。  可以让浏览器不使用缓存。</p>
+<ol>
+<li>浏览器发送Http request, 给Web 服务器， header中带有Cache-Control: no-cache.   明确告诉Web服务器，客户端不使用缓存。 </li>
+<li>Web服务器将把最新的文档发送给浏览器客户端.<br>Pragma: no-cache的作用和Cache-Control: no-cache一模一样。 都是不使用缓存。<br>Pragma: no-cache 是HTTP 1.0中定义的， 所以为了兼容HTTP 1.0. 所以会同时使用Pragma: no-cache和Cache-Control: no-cache</li>
+</ol>
+<h1 id="状态码"><a href="#状态码" class="headerlink" title="状态码"></a>状态码</h1><blockquote>
+<p><a href="http://www.cnblogs.com/wakey/p/4241526.html" target="_blank" rel="noopener">http://www.cnblogs.com/wakey/p/4241526.html</a>  </p>
+</blockquote>
+<p>204    No Content(没有内容)    Response中包含一些Header和一个状态行， 但不包括实体的主题内容（没有response body）<br>302    Found（已找到）    与状态码301类似。但这里的移除是临时的。 客户端会使用Location中给出的URL，重新发送新的HTTP request。<br>304    Not Modified（未修改）    客户的缓存资源是最新的， 要客户端使用缓存<br>401    Unauthorized（未授权）    需要客户端对自己认证<br>403    Forbidden（禁止）    请求被服务器拒绝了<br>404    Not Found（未找到）    未找到资源<br>407    Proxy Authentication Required(要求进行代理认证)    与状态码401类似， 用于需要进行认证的代理服务器  </p>
+<h2 id="206-Partial-Content-部分内容"><a href="#206-Partial-Content-部分内容" class="headerlink" title="206 Partial Content(部分内容)"></a>206 Partial Content(部分内容)</h2><p>206状态码代表服务器已经成功处理了部分GET请求（只有发送GET 方法的request, web服务器才可能返回206），<br>应用场景：</p>
+<ol>
+<li>FlashGet, 迅雷或者HTTP下载工具都是使用206状态码来实现断点续传</li>
+<li>将以个大文档分解为多个下载段同时下载 比如，在线看视频  </li>
+</ol>
+<h2 id="400-Bad-Request（坏请求"><a href="#400-Bad-Request（坏请求" class="headerlink" title="400 Bad Request（坏请求)"></a>400 Bad Request（坏请求)</h2><p>发送的Request中的数据有错误(比如：表单有错误，Cookie有错误)，  这个我们也经常见到。   </p>
+<h2 id="411-Length-Required（要求长度指示）"><a href="#411-Length-Required（要求长度指示）" class="headerlink" title="411 Length Required（要求长度指示）"></a>411 Length Required（要求长度指示）</h2><p>服务器要求在Request中包含Content-Length。<br>当浏览器使用Post方法，发送数据给Web服务器时， 必须要有Content-Length。这样Web服务器才知道你要发送多少数据，否则Web服务器会返回411状态码<br>实例： 发送一个Post方法的Request 给<a href="http://www.google.com" target="_blank" rel="noopener">www.google.com</a>.   Request中没有Content-Length</p>
+<h2 id="413-Request-Entity-Too-Large（请求实体太大）"><a href="#413-Request-Entity-Too-Large（请求实体太大）" class="headerlink" title="413 Request Entity Too Large（请求实体太大）"></a>413 Request Entity Too Large（请求实体太大）</h2><p>作用：客户端发送的实体主体部分比服务器能够或者希望处理的要大。  一般情况下我们看不到这个状态码。 因为浏览器不会发送太大的数据给网站，但是机器人可能会。<br>实例: 用post方法发送一个大文件(100MB以上)给<a href="http://www.google.com" target="_blank" rel="noopener">www.google.com</a></p>
+<h2 id="414-Request-URI-Too-Long-请求URI太长"><a href="#414-Request-URI-Too-Long-请求URI太长" class="headerlink" title="414 Request URI Too Long(请求URI太长)"></a>414 Request URI Too Long(请求URI太长)</h2><p>就是说Request URI太长， 一般浏览器本身对URI的长度就会有限制，所以不会发送URI很长的Request. 我们平常是根本看不到414错误的。 但是机器人可以发送很长URI。  </p>
+<h1 id="Cookie"><a href="#Cookie" class="headerlink" title="Cookie"></a>Cookie</h1><p>可以大致把Cookie分为2类： 回话cookie和持久cookie<br>会话cookie: 是一种临时的cookie，它记录了用户访问站点时的设置和偏好，关闭浏览器，会话cookie就被删除了<br>持久cookie: 存储在硬盘上，（不管浏览器退出，或者电脑重启，持久cookie都存在）， 持久cookie有过期时间</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/http/" rel="tag"># http</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/25/连续发送ajax/" rel="next" title="连续发送ajax">
+                <i class="fa fa-chevron-left"></i> 连续发送ajax
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/07/01/你不知道的javascript-上/" rel="prev" title="你不知道的javascript(上)">
+                你不知道的javascript(上) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div class="ds-thread" data-thread-key="2017/07/01/http总结/"
+           data-title="http总结" data-url="http://fsysfq.top/2017/07/01/http总结/">
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">石富全</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">26</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/sivkun" target="_blank" title="myGitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>myGitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://fex.baidu.com" target="_blank" title="百度FEX">
+                      
+                        <i class="fa fa-fw fa-fex.baidu"></i>百度FEX</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://taobaofed.org" target="_blank" title="淘宝FED">
+                      
+                        <i class="fa fa-fw fa-taobaofed"></i>淘宝FED</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://www.alloyteam.com/" target="_blank" title="alloyteam">
+                      
+                        <i class="fa fa-fw fa-alloyteam"></i>alloyteam</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://www.cnblogs.com/sivkun/" target="_blank" title="我的博客园">
+                      
+                        <i class="fa fa-fw fa-cnblogs"></i>我的博客园</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Get和Post方法区别"><span class="nav-number">1.</span> <span class="nav-text">Get和Post方法区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Cache-Control"><span class="nav-number">2.</span> <span class="nav-text">Cache-Control</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ETag"><span class="nav-number">3.</span> <span class="nav-text">ETag</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#浏览器不使用缓存"><span class="nav-number">4.</span> <span class="nav-text">浏览器不使用缓存</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#状态码"><span class="nav-number">5.</span> <span class="nav-text">状态码</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#206-Partial-Content-部分内容"><span class="nav-number">5.1.</span> <span class="nav-text">206 Partial Content(部分内容)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#400-Bad-Request（坏请求"><span class="nav-number">5.2.</span> <span class="nav-text">400 Bad Request（坏请求)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#411-Length-Required（要求长度指示）"><span class="nav-number">5.3.</span> <span class="nav-text">411 Length Required（要求长度指示）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#413-Request-Entity-Too-Large（请求实体太大）"><span class="nav-number">5.4.</span> <span class="nav-text">413 Request Entity Too Large（请求实体太大）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#414-Request-URI-Too-Long-请求URI太长"><span class="nav-number">5.5.</span> <span class="nav-text">414 Request URI Too Long(请求URI太长)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Cookie"><span class="nav-number">6.</span> <span class="nav-text">Cookie</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">石富全</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"discussinfo"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

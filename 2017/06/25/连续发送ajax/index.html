@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Ajax," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="sivkun" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="目的测试全局一个XMLHttpRequest对象，用来发送ajax请求，会出现的问题。加深对ajax的认识，以及chrome一个请求的timing分析。分析过程如下 服务器端php+apache作用是客户端发送post请求数据（json格式），根据发送的来请求进行休眠（便于观察），然后直接返回请求内容。123456header(&quot;Access-control-allow-origin:*&quot;);//">
+<meta name="keywords" content="Ajax">
+<meta property="og:type" content="article">
+<meta property="og:title" content="连续发送ajax">
+<meta property="og:url" content="http://fsysfq.top/2017/06/25/连续发送ajax/index.html">
+<meta property="og:site_name" content="sivkun">
+<meta property="og:description" content="目的测试全局一个XMLHttpRequest对象，用来发送ajax请求，会出现的问题。加深对ajax的认识，以及chrome一个请求的timing分析。分析过程如下 服务器端php+apache作用是客户端发送post请求数据（json格式），根据发送的来请求进行休眠（便于观察），然后直接返回请求内容。123456header(&quot;Access-control-allow-origin:*&quot;);//">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://fsysfq.top/2017/06/25/连续发送ajax/globalxhr5times.png">
+<meta property="og:image" content="http://fsysfq.top/2017/06/25/连续发送ajax/globalxhr5times_success.png">
+<meta property="og:image" content="http://fsysfq.top/2017/06/25/连续发送ajax/15TimesXhr.png">
+<meta property="og:image" content="http://fsysfq.top/2017/06/25/连续发送ajax/chromeTimeLine.png">
+<meta property="og:updated_time" content="2018-07-06T06:47:16.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="连续发送ajax">
+<meta name="twitter:description" content="目的测试全局一个XMLHttpRequest对象，用来发送ajax请求，会出现的问题。加深对ajax的认识，以及chrome一个请求的timing分析。分析过程如下 服务器端php+apache作用是客户端发送post请求数据（json格式），根据发送的来请求进行休眠（便于观察），然后直接返回请求内容。123456header(&quot;Access-control-allow-origin:*&quot;);//">
+<meta name="twitter:image" content="http://fsysfq.top/2017/06/25/连续发送ajax/globalxhr5times.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://fsysfq.top/2017/06/25/连续发送ajax/"/>
+
+
+
+
+
+  <title>连续发送ajax | sivkun</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">sivkun</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">follow your heart</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://fsysfq.top/2017/06/25/连续发送ajax/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="石富全">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="sivkun">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">连续发送ajax</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-25T22:47:42+08:00">
+                2017-06-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/06/25/连续发送ajax/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/06/25/连续发送ajax/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h1><p>测试全局一个XMLHttpRequest对象，用来发送ajax请求，会出现的问题。<br>加深对ajax的认识，以及chrome一个请求的timing分析。<br>分析过程如下</p>
+<h1 id="服务器端php-apache"><a href="#服务器端php-apache" class="headerlink" title="服务器端php+apache"></a>服务器端php+apache</h1><p>作用是客户端发送post请求数据（json格式），根据发送的来请求进行休眠（便于观察），然后直接返回请求内容。<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">header(<span class="string">"Access-control-allow-origin:*"</span>);<span class="comment">//这里我是测试的允许跨域</span></span><br><span class="line">$str = file_get_contents(<span class="string">'php://input'</span>); <span class="comment">//这里得到字符串</span></span><br><span class="line">$data = json_decode($str);<span class="comment">//转成JSON对象</span></span><br><span class="line">sleep($data-&gt;sleepTime);<span class="comment">//休眠，便于观察</span></span><br><span class="line"><span class="comment">//echo $data-&gt;masterIP;//如果要操作数据可以这样操作</span></span><br><span class="line"><span class="keyword">echo</span> json_encode($data); <span class="comment">//json_encode又转成字符串</span></span><br></pre></td></tr></table></figure></p>
+<a id="more"></a>
+<h1 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h1><h2 id="使用一个XMLHttpRequest对象发送ajax请求"><a href="#使用一个XMLHttpRequest对象发送ajax请求" class="headerlink" title="使用一个XMLHttpRequest对象发送ajax请求"></a>使用一个XMLHttpRequest对象发送ajax请求</h2><p>如下创建一个全局的<code>xmlHttp</code>对象:<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> xmlHttp = GetXmlHttpObject();</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">GetXmlHttpObject</span>(<span class="params"></span>) //<span class="title">check</span> <span class="title">browser</span> <span class="title">support</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">var</span> xmlHttp = <span class="literal">null</span>;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="comment">// Firefox, Opera 8.0+, Safari</span></span><br><span class="line">    xmlHttp = <span class="keyword">new</span> XMLHttpRequest();</span><br><span class="line">  &#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">    <span class="comment">// Internet Explorer</span></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      xmlHttp = <span class="keyword">new</span> ActiveXObject(<span class="string">"Msxml2.XMLHTTP"</span>);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">      xmlHttp = <span class="keyword">new</span> ActiveXObject(<span class="string">"Microsoft.XMLHTTP"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> xmlHttp;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>发送请求方法：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">send1</span>(<span class="params">n, sleepTime</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> url = <span class="string">"http://localhost/echo.php"</span>;</span><br><span class="line">  xmlHttp.onreadystatechange = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (xmlHttp.readyState == <span class="number">4</span> &amp;&amp; xmlHttp.status == <span class="number">200</span>) &#123;</span><br><span class="line">      <span class="keyword">var</span> data = <span class="built_in">JSON</span>.parse(xmlHttp.responseText);<span class="comment">//解析为json对象</span></span><br><span class="line">      <span class="built_in">console</span>.log(data);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line">  xmlHttp.open(<span class="string">"POST"</span>, url, <span class="literal">true</span>);</span><br><span class="line">  <span class="keyword">var</span> data = &#123;</span><br><span class="line">    n: n,</span><br><span class="line">    sleepTime: sleepTime,</span><br><span class="line">    masterIP: <span class="string">"172.20.1.1"</span>,</span><br><span class="line">    slavesIP: [<span class="string">"172.20.1.2"</span>, <span class="string">"172.20.1.3"</span>]</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="keyword">var</span> sendData = <span class="built_in">JSON</span>.stringify(data);</span><br><span class="line">  xmlHttp.send(sendData);<span class="comment">//发送</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>发送多次请求：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* n: 发送请求次数</span></span><br><span class="line"><span class="comment">* sleepTime: 控制服务器sleep时间</span></span><br><span class="line"><span class="comment">* tick: 控制每隔多久发送一次请求 </span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">exec1</span>(<span class="params">n, sleepTime, tick</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">    setTimeout((<span class="function"><span class="keyword">function</span> (<span class="params">i</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123; send1(i, sleepTime); &#125;</span><br><span class="line">    &#125;)(i), tick * i * <span class="number">1000</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>每隔一秒发送一次请求，服务器端休眠一秒。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">exec1(<span class="number">5</span>,<span class="number">1</span>,<span class="number">1</span>);</span><br></pre></td></tr></table></figure></p>
+<p>结果：<br><img src="/2017/06/25/连续发送ajax/globalxhr5times.png" alt="globalxhr5times"><br>可以发现前四次请求都被取消了，只有最后一次成功。并且最后一次请求用时1.01s。<br>当然如果连续发送前四次也会被取消。 </p>
+<p>每隔1.01秒发送一次请求，服务器端休眠一秒。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">exec1(<span class="number">5</span>,<span class="number">1</span>,<span class="number">1.01</span>);</span><br></pre></td></tr></table></figure></p>
+<p>结果：<br><img src="/2017/06/25/连续发送ajax/globalxhr5times_success.png" alt="globalxhr5times_success"><br>显然请求都成功了。</p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>同一个XMLHttpRequest对象，可以多次发送ajax请求，但是不能同时处理多个请求。<br>可以有用处：通过ajax方式进行页面无刷新更新的时候。通过ajax返回的数据插入页面这种方式更新页面内容，导航切换过快上一个请求还没返回，就会被取消，不会发生过一段时间页面出现上一次请求的内容。（我就遇到过着样的问题）。</p>
+<h2 id="通过创建多个对象同时发送ajax请求"><a href="#通过创建多个对象同时发送ajax请求" class="headerlink" title="通过创建多个对象同时发送ajax请求"></a>通过创建多个对象同时发送ajax请求</h2><p>代码如下<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"> <span class="function"><span class="keyword">function</span> <span class="title">send2</span>(<span class="params">n, sleepTime</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> xmlHttp = GetXmlHttpObject();</span><br><span class="line">  <span class="keyword">var</span> sparkServerIP = <span class="string">"172.20.1.1"</span>;</span><br><span class="line">  <span class="keyword">var</span> url = <span class="string">"http://localhost/echo.php"</span>;</span><br><span class="line">  xmlHttp.onreadystatechange = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (xmlHttp.readyState == <span class="number">4</span> &amp;&amp; xmlHttp.status == <span class="number">200</span>) &#123;</span><br><span class="line">      <span class="keyword">var</span> data = <span class="built_in">JSON</span>.parse(xmlHttp.responseText);<span class="comment">//解析为json对象</span></span><br><span class="line">      <span class="built_in">console</span>.log(data);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line">  xmlHttp.open(<span class="string">"POST"</span>, url, <span class="literal">true</span>);</span><br><span class="line">  <span class="keyword">var</span> data = &#123;</span><br><span class="line">    n: n,</span><br><span class="line">    sleepTime: sleepTime,</span><br><span class="line">    masterIP: <span class="string">"172.20.1.1"</span>,</span><br><span class="line">    slavesIP: [<span class="string">"172.20.1.2"</span>, <span class="string">"172.20.1.3"</span>]</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="keyword">var</span> sendData = <span class="built_in">JSON</span>.stringify(data);</span><br><span class="line">  xmlHttp.send(sendData);</span><br><span class="line">&#125;</span><br><span class="line"> <span class="function"><span class="keyword">function</span> <span class="title">exec2</span>(<span class="params">n, sleepTime</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">    send2(i, sleepTime)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">exec2(<span class="number">15</span>,<span class="number">1</span>)</span><br></pre></td></tr></table></figure></p>
+<p>网络请求图：<br><img src="/2017/06/25/连续发送ajax/15TimesXhr.png" alt="15TimesXhr"><br>绿条部分可以看出这15次请求是分拨进行的，6个一波。说明chrome xhr请求并发量为6。 灰色线条表示：chrome等待发出请求。<br><img src="/2017/06/25/连续发送ajax/chromeTimeLine.png" alt="chromeTimeLine"><br>时间线中stalled停滞不前，表示chrome请求发出前的等待时间。<br>多次发送同一个请求，前6次会进行dns查询和初始化连接，然后的请求会重复利用已经初始化的网络请求对象。<br>在request、response阶段：<br>包括:请求时间，waiting（ttfb）时间，和content download时间。<br>waiting：服务端处理时间,即受到请求到输出响应头这段时间。<br>content download：服务器处理完进行响应，客户端下载时间。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ol>
+<li>同一个客户端通过ajax向apache服务器中同一个php文件发出请求，apache会创建不同的进程进行响应。</li>
+<li>同一个xmlHttprequest实例，连续发出请求时，如果前一个请求没有返回响应，则前一个ajax请求会被取消。如果前一个请求返回，后一个请求不会取消前一个请求。</li>
+<li>如果要同时发送多个请求要创建多个xhr对象。</li>
+<li>chrome浏览器能并发进行6个http请求。</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Ajax/" rel="tag"># Ajax</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/17/react-router-analysis/" rel="next" title="react-router-analysis">
+                <i class="fa fa-chevron-left"></i> react-router-analysis
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/07/01/http总结/" rel="prev" title="http总结">
+                http总结 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div class="ds-thread" data-thread-key="2017/06/25/连续发送ajax/"
+           data-title="连续发送ajax" data-url="http://fsysfq.top/2017/06/25/连续发送ajax/">
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">石富全</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">26</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/sivkun" target="_blank" title="myGitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>myGitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://fex.baidu.com" target="_blank" title="百度FEX">
+                      
+                        <i class="fa fa-fw fa-fex.baidu"></i>百度FEX</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://taobaofed.org" target="_blank" title="淘宝FED">
+                      
+                        <i class="fa fa-fw fa-taobaofed"></i>淘宝FED</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://www.alloyteam.com/" target="_blank" title="alloyteam">
+                      
+                        <i class="fa fa-fw fa-alloyteam"></i>alloyteam</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://www.cnblogs.com/sivkun/" target="_blank" title="我的博客园">
+                      
+                        <i class="fa fa-fw fa-cnblogs"></i>我的博客园</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#目的"><span class="nav-number">1.</span> <span class="nav-text">目的</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#服务器端php-apache"><span class="nav-number">2.</span> <span class="nav-text">服务器端php+apache</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#客户端"><span class="nav-number">3.</span> <span class="nav-text">客户端</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用一个XMLHttpRequest对象发送ajax请求"><span class="nav-number">3.1.</span> <span class="nav-text">使用一个XMLHttpRequest对象发送ajax请求</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#小结"><span class="nav-number">3.1.1.</span> <span class="nav-text">小结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#通过创建多个对象同时发送ajax请求"><span class="nav-number">3.2.</span> <span class="nav-text">通过创建多个对象同时发送ajax请求</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">石富全</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"discussinfo"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

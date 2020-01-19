@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="react-router," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="sivkun" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="参考链接  https://reacttraining.com/react-router/web/api/BrowserRouterhttps://github.com/ReactTraining/history  版本：react-router V4 historyreact-router官方文档有说history is mutable。给的例子：12345678910class Comp ex">
+<meta name="keywords" content="react-router">
+<meta property="og:type" content="article">
+<meta property="og:title" content="react-router-analysis">
+<meta property="og:url" content="http://fsysfq.top/2017/06/17/react-router-analysis/index.html">
+<meta property="og:site_name" content="sivkun">
+<meta property="og:description" content="参考链接  https://reacttraining.com/react-router/web/api/BrowserRouterhttps://github.com/ReactTraining/history  版本：react-router V4 historyreact-router官方文档有说history is mutable。给的例子：12345678910class Comp ex">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://fsysfq.top/2017/06/17/react-router-analysis/history.png">
+<meta property="og:image" content="https://camo.githubusercontent.com/e0b90b90518e04240605b28051ebca3d1157fac5/687474703a2f2f696d672e736869656c64732e696f2f6e706d2f646d2f706174682d746f2d7265676578702e7376673f7374796c653d666c6174">
+<meta property="og:updated_time" content="2018-07-06T06:47:16.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="react-router-analysis">
+<meta name="twitter:description" content="参考链接  https://reacttraining.com/react-router/web/api/BrowserRouterhttps://github.com/ReactTraining/history  版本：react-router V4 historyreact-router官方文档有说history is mutable。给的例子：12345678910class Comp ex">
+<meta name="twitter:image" content="http://fsysfq.top/2017/06/17/react-router-analysis/history.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://fsysfq.top/2017/06/17/react-router-analysis/"/>
+
+
+
+
+
+  <title>react-router-analysis | sivkun</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">sivkun</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">follow your heart</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://fsysfq.top/2017/06/17/react-router-analysis/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="石富全">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="sivkun">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">react-router-analysis</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-17T18:22:23+08:00">
+                2017-06-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/源码分析/" itemprop="url" rel="index">
+                    <span itemprop="name">源码分析</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/06/17/react-router-analysis/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/06/17/react-router-analysis/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>参考链接</p>
+<blockquote>
+<p><a href="https://reacttraining.com/react-router/web/api/BrowserRouter" target="_blank" rel="noopener">https://reacttraining.com/react-router/web/api/BrowserRouter</a><br><a href="https://github.com/ReactTraining/history" target="_blank" rel="noopener">https://github.com/ReactTraining/history</a></p>
+</blockquote>
+<p><strong>版本：react-router V4</strong></p>
+<h1 id="history"><a href="#history" class="headerlink" title="history"></a>history</h1><p>react-router官方文档有说<code>history is mutable</code>。<br>给的例子：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Comp</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  componentWillReceiveProps(nextProps) &#123;</span><br><span class="line">    <span class="comment">// will be true</span></span><br><span class="line">    <span class="keyword">const</span> locationChanged = nextProps.location !== <span class="keyword">this</span>.props.location</span><br><span class="line"></span><br><span class="line">    <span class="comment">// INCORRECT, will *always* be false because history is mutable.</span></span><br><span class="line">    <span class="keyword">const</span> locationChanged = nextProps.history.location !== <span class="keyword">this</span>.props.history.location</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;Route component=&#123;Comp&#125;/&gt;</span><br></pre></td></tr></table></figure></p>
+<p>原因是：<code>&lt;Route&gt;</code>向<code>Comp</code>传入props包括<code>match, location, history, staticContext</code>(见<code>&lt;Route&gt;</code>分析),<code>history</code>是从<code>context</code>上下文中获取得到，一直是对同一个对象的引用，所以一直<code>nextProps.history.location === this.props.history.location</code>，而<code>nextProps.location !== this.props.location</code>，是因为在<code>history</code>库里面<code>history.location</code>的计算方式，是重新计算<code>location</code>对象。<code>const location = createLocation(path, state, createKey(), history.location)</code>。具体见<a href="https://github.com/ReactTraining/history/blob/master/modules/LocationUtils.js" target="_blank" rel="noopener">https://github.com/ReactTraining/history/blob/master/modules/LocationUtils.js</a><br><a id="more"></a></p>
+<h2 id="createHistory-props"><a href="#createHistory-props" class="headerlink" title="createHistory(props={})"></a>createHistory(props={})</h2>  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">createBrowserHistory(&#123;</span><br><span class="line">  basename: <span class="string">''</span>,             <span class="comment">// The base URL of the app (see below)</span></span><br><span class="line">  forceRefresh: <span class="literal">false</span>,      <span class="comment">// Set true to force full page refreshes</span></span><br><span class="line">  keyLength: <span class="number">6</span>,             <span class="comment">// The length of location.key</span></span><br><span class="line">  <span class="comment">// A function to use to confirm navigation with the user (see below)</span></span><br><span class="line">  getUserConfirmation: <span class="function">(<span class="params">message, callback</span>) =&gt;</span> callback(<span class="built_in">window</span>.confirm(message))</span><br><span class="line">&#125;)</span><br><span class="line">createMemoryHistory(&#123;</span><br><span class="line">  initialEntries: [ <span class="string">'/'</span> ],  <span class="comment">// The initial URLs in the history stack</span></span><br><span class="line">  initialIndex: <span class="number">0</span>,          <span class="comment">// The starting index in the history stack</span></span><br><span class="line">  keyLength: <span class="number">6</span>,             <span class="comment">// The length of location.key</span></span><br><span class="line">  <span class="comment">// A function to use to confirm navigation with the user. Required</span></span><br><span class="line">  <span class="comment">// if you return string prompts from transition hooks (see below)</span></span><br><span class="line">  getUserConfirmation: <span class="literal">null</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">createHashHistory(&#123;</span><br><span class="line">  basename: <span class="string">''</span>,             <span class="comment">// The base URL of the app (see below)</span></span><br><span class="line">  hashType: <span class="string">'slash'</span>,        <span class="comment">// The hash type to use (see below)</span></span><br><span class="line">  <span class="comment">// A function to use to confirm navigation with the user (see below)</span></span><br><span class="line">  getUserConfirmation: <span class="function">(<span class="params">message, callback</span>) =&gt;</span> callback(<span class="built_in">window</span>.confirm(message))</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>history对象结构：</p>
+<p><img src="/2017/06/17/react-router-analysis/history.png" alt="history"></p>
+<h1 id="BrowserRouter"><a href="#BrowserRouter" class="headerlink" title="BrowserRouter"></a>BrowserRouter</h1><p><code>BrowserRouter</code>是对<code>Router</code>封装后的高阶组件。封装进去了<code>browserHistory</code>。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">BrowserRouter</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  <span class="keyword">static</span> propTypes = &#123;</span><br><span class="line">    basename: PropTypes.string,</span><br><span class="line">    forceRefresh: PropTypes.bool,</span><br><span class="line">    getUserConfirmation: PropTypes.func,</span><br><span class="line">    keyLength: PropTypes.number,</span><br><span class="line">    children: PropTypes.node</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  history = createHistory(<span class="keyword">this</span>.props)</span><br><span class="line"></span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">return</span> &lt;Router history=&#123;this.history&#125; children=&#123;this.props.children&#125;/&gt;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><code>BrowserRouter</code>接收的props当做了<code>createHistory</code>的参数。<br>如果设置了<code>basename</code>属性，history初始化后，<code>history.location.pathname</code>的值是url中pathname除去<code>basename</code>后面的部分。<br>下面是在history的<code>createBrowserHistory</code>的部分源码：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> basename = props.basename ? stripTrailingSlash(addLeadingSlash(props.basename)) : <span class="string">''</span></span><br><span class="line"> <span class="keyword">const</span> getDOMLocation = <span class="function">(<span class="params">historyState</span>) =&gt;</span> &#123;</span><br><span class="line">   <span class="keyword">const</span> &#123; key, state &#125; = (historyState || &#123;&#125;)</span><br><span class="line">   <span class="keyword">const</span> &#123; pathname, search, hash &#125; = <span class="built_in">window</span>.location</span><br><span class="line">   <span class="keyword">let</span> path = pathname + search + hash</span><br><span class="line">   <span class="keyword">if</span> (basename)</span><br><span class="line">     path = stripBasename(path, basename)<span class="comment">//如果设置了basename，path会除去basename部分。</span></span><br><span class="line">   <span class="keyword">return</span> createLocation(path, state, key)</span><br><span class="line"> &#125;</span><br><span class="line"> stripBasename = <span class="function">(<span class="params">path, prefix</span>) =&gt;</span></span><br><span class="line"> hasBasename(path, prefix) ? path.substr(prefix.length) : path</span><br></pre></td></tr></table></figure></p>
+<p>如：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;Router basename=<span class="string">'reactRouter'</span>&gt;</span><br><span class="line">  &lt;Route path=<span class="string">'/about'</span> component=&#123;About&#125;/&gt;</span><br><span class="line">&lt;<span class="regexp">/Router&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>浏览器地址栏显示：<a href="http://localhost:3000/reactRouter/about，此时，`history.location.pathname=&#39;/about&#39;`。" target="_blank" rel="noopener">http://localhost:3000/reactRouter/about，此时，`history.location.pathname=&#39;/about&#39;`。</a></p>
+<h1 id="Router"><a href="#Router" class="headerlink" title="Router"></a>Router</h1><p><code>Router</code>初始化路由环境，监听<code>history</code>对象变化触发更新，通过<code>context</code>向下传递<code>history</code>和<code>route</code>信息。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">getChildContext() &#123;</span><br><span class="line">   <span class="keyword">return</span> &#123;</span><br><span class="line">     router: &#123;</span><br><span class="line">       ...this.context.router,</span><br><span class="line">       history: <span class="keyword">this</span>.props.history,</span><br><span class="line">       route: &#123;</span><br><span class="line">         location: <span class="keyword">this</span>.props.history.location,</span><br><span class="line">         match: <span class="keyword">this</span>.state.match</span><br><span class="line">       &#125;</span><br><span class="line">     &#125;</span><br><span class="line">   &#125;</span><br><span class="line"> &#125;</span><br><span class="line"> state = &#123;</span><br><span class="line">   match: <span class="keyword">this</span>.computeMatch(<span class="keyword">this</span>.props.history.location.pathname)</span><br><span class="line"> &#125;</span><br><span class="line"> computeMatch(pathname) &#123;</span><br><span class="line">   <span class="keyword">return</span> &#123;</span><br><span class="line">     path: <span class="string">'/'</span>,</span><br><span class="line">     url: <span class="string">'/'</span>,</span><br><span class="line">     params: &#123;&#125;,</span><br><span class="line">     isExact: pathname === <span class="string">'/'</span><span class="comment">//作用是判断是精确全部匹配到尾，还是前部分匹配。</span></span><br><span class="line">   &#125;</span><br><span class="line"> &#125;</span><br><span class="line"> componentWillMount() &#123;</span><br><span class="line">   <span class="keyword">const</span> &#123; children, history &#125; = <span class="keyword">this</span>.props</span><br><span class="line">   invariant(</span><br><span class="line">     children == <span class="literal">null</span> || React.Children.count(children) === <span class="number">1</span>,</span><br><span class="line">     <span class="string">'A &lt;Router&gt; may have only one child element'</span></span><br><span class="line">   )</span><br><span class="line">   <span class="comment">// Do this here so we can setState when a &lt;Redirect&gt; changes the</span></span><br><span class="line">   <span class="comment">// location in componentWillMount. This happens e.g. when doing</span></span><br><span class="line">   <span class="comment">// server rendering using a &lt;StaticRouter&gt;.</span></span><br><span class="line">   <span class="comment">// history.listen会监听history的变化，触发组件更新。</span></span><br><span class="line">   <span class="keyword">this</span>.unlisten = history.listen(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">     <span class="keyword">this</span>.setState(&#123;</span><br><span class="line">       match: <span class="keyword">this</span>.computeMatch(history.location.pathname)</span><br><span class="line">     &#125;)</span><br><span class="line">   &#125;)</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="comment">//render只是将子组件简单的渲染输出。</span></span><br><span class="line"> render() &#123;</span><br><span class="line">   <span class="keyword">const</span> &#123; children &#125; = <span class="keyword">this</span>.props</span><br><span class="line">   <span class="keyword">return</span> children ? React.Children.only(children) : <span class="literal">null</span></span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure></p>
+<p>可以看出<code>match</code>对象结构：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  path: <span class="string">'/'</span>,</span><br><span class="line">  url: <span class="string">'/'</span>,</span><br><span class="line">  params: &#123;&#125;,</span><br><span class="line">  isExact: pathname === <span class="string">'/'</span><span class="comment">//作用是判断是精确全部匹配到尾，还是前部分匹配。</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="Route"><a href="#Route" class="headerlink" title="Route"></a>Route</h1><p><code>Route</code>作用：根据<code>location</code>和<code>path</code>匹配路由,判断是否渲染<code>component</code>，并向<code>component</code>传入props<code>{ match, location, history, staticContext }</code></p>
+<p>在Route.js的render函数中添加注释：<code>console.log(&quot;&lt;start&gt;\n&quot;,this.props.path,this.state.match,&quot;\n&lt;/end&gt;&quot;)</code>进行测试，<br>观察<code>match</code>对象变化，发现顶层路由<code>Route</code>都会进行匹配判断。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Route</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  <span class="keyword">static</span> propTypes = &#123;</span><br><span class="line">    computedMatch: PropTypes.object, <span class="comment">// private, from &lt;Switch&gt;</span></span><br><span class="line">    path: PropTypes.string,</span><br><span class="line">    exact: PropTypes.bool,<span class="comment">//精确匹配路由</span></span><br><span class="line">    strict: PropTypes.bool,<span class="comment">//严格匹配路径，关乎尾随的斜杠。</span></span><br><span class="line">    component: PropTypes.func,<span class="comment">//路由匹配时，渲染指定组件。</span></span><br><span class="line">    render: PropTypes.func,<span class="comment">//不指定component的情况下，可以使用render来渲染匹配的组件。</span></span><br><span class="line">    children: PropTypes.oneOfType([ <span class="comment">//在路径匹配的情况下会渲染children，exact属性无效</span></span><br><span class="line">      PropTypes.func,</span><br><span class="line">      PropTypes.node</span><br><span class="line">    ]),</span><br><span class="line">    location: PropTypes.object<span class="comment">//设置Location，作用暂时不知。</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">static</span> contextTypes = &#123;</span><br><span class="line">    router: PropTypes.shape(&#123;</span><br><span class="line">      history: PropTypes.object.isRequired,</span><br><span class="line">      route: PropTypes.object.isRequired,</span><br><span class="line">      staticContext: PropTypes.object</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">static</span> childContextTypes = &#123;</span><br><span class="line">    router: PropTypes.object.isRequired</span><br><span class="line">  &#125;</span><br><span class="line">  getChildContext() &#123; <span class="comment">//更新context中的route属性，继续向子元素传递。</span></span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      router: &#123;</span><br><span class="line">        ...this.context.router,</span><br><span class="line">        route: &#123;</span><br><span class="line">          location: <span class="keyword">this</span>.props.location || <span class="keyword">this</span>.context.router.route.location,</span><br><span class="line">          match: <span class="keyword">this</span>.state.match</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  state = &#123;</span><br><span class="line">    match: <span class="keyword">this</span>.computeMatch(<span class="keyword">this</span>.props, <span class="keyword">this</span>.context.router)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">//计算match对象的值，&lt;Switch&gt;已经计算了computedMatch，具体见&lt;Switch&gt;分析。</span></span><br><span class="line">  computeMatch(&#123; computedMatch, location, path, strict, exact &#125;, &#123; route &#125;) &#123;</span><br><span class="line">    <span class="keyword">if</span> (computedMatch)</span><br><span class="line">      <span class="keyword">return</span> computedMatch <span class="comment">// &lt;Switch&gt; already computed the match for us</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> pathname = (location || route.location).pathname <span class="comment">//这里的pathname就是，浏览器导航栏显示的路径的一部分。</span></span><br><span class="line">      <span class="comment">// 当Route设置为&lt;Route path='/Topics/:topicId' component=&#123;Topic&#125;/&gt;，</span></span><br><span class="line">      <span class="comment">// 并且路由匹配后，match对象会有，params属性，记录匹配的参数。</span></span><br><span class="line">      <span class="comment">// 如点击&lt;Link to='/Topics/rendering'&gt;rendering&lt;/Link&gt;后（此时location.pathname='/Topics/rendering'），</span></span><br><span class="line">      <span class="comment">// 此时match.params=&#123;topicId:rendering&#125;。</span></span><br><span class="line">      <span class="comment">// 如果不设置path props，则使用this.context.router.match的值,这样该Route对应的组件会渲染。</span></span><br><span class="line">      <span class="comment">// matchPath计算match对象。</span></span><br><span class="line">    <span class="keyword">return</span> path ? matchPath(pathname, &#123; path, strict, exact &#125;) : route.match</span><br><span class="line">  &#125;</span><br><span class="line">  componentWillMount() &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; component, render, children &#125; = <span class="keyword">this</span>.props</span><br><span class="line">  &#125;</span><br><span class="line">  componentWillReceiveProps(nextProps, nextContext) &#123;</span><br><span class="line">    <span class="keyword">this</span>.setState(&#123;</span><br><span class="line">      match: <span class="keyword">this</span>.computeMatch(nextProps, nextContext.router)</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; match &#125; = <span class="keyword">this</span>.state</span><br><span class="line">    <span class="keyword">const</span> &#123; children, component, render &#125; = <span class="keyword">this</span>.props</span><br><span class="line">    <span class="keyword">const</span> &#123; history, route, staticContext &#125; = <span class="keyword">this</span>.context.router</span><br><span class="line">    <span class="keyword">const</span> location = <span class="keyword">this</span>.props.location || route.location</span><br><span class="line">    <span class="keyword">const</span> props = &#123; match, location, history, staticContext &#125;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      component ? ( <span class="comment">// component prop gets first priority, only called if there's a match</span></span><br><span class="line">        match ? React.createElement(component, props) : <span class="literal">null</span></span><br><span class="line">      ) : render ? ( <span class="comment">// render prop is next, only called if there's a match</span></span><br><span class="line">        match ? render(props) : <span class="literal">null</span></span><br><span class="line">      ) : children ? ( <span class="comment">// children come last, always called</span></span><br><span class="line">        <span class="keyword">typeof</span> children === <span class="string">'function'</span> ? (</span><br><span class="line">          children(props)</span><br><span class="line">        ) : !<span class="built_in">Array</span>.isArray(children) || children.length ? ( <span class="comment">// Preact defaults to empty children array</span></span><br><span class="line">          React.Children.only(children)</span><br><span class="line">        ) : (</span><br><span class="line">          <span class="literal">null</span></span><br><span class="line">        )</span><br><span class="line">      ) : (</span><br><span class="line">        <span class="literal">null</span></span><br><span class="line">      )</span><br><span class="line">    )</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>从render函数可以看出，优先级顺序是component&gt;render&gt;children。并且children分支没有判断match再进行返回。<br>三目运算符：<br><code>a?b:c?d:e</code>,这行代码应该等同于<code>a?b:(c?d:e)</code>,两个三目运算符，优先级相同，优先级相同时，从右往左结合。<br>但是运算还是从左往右运算。结合和运算要区分开来。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">expression1 ? sentence1 :</span><br><span class="line">expression2 ? sentence2 :</span><br><span class="line">expression3 ? sentence3 :</span><br><span class="line">...</span><br></pre></td></tr></table></figure></p>
+<p>只要任意一个expressionN的判断为真，那么sentenceN立即执行，这个判断结束，后面的任何判断不再执行。而如果我们写成if-else<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(expression1)&#123;</span><br><span class="line">    sentence1;</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span>(expression2)&#123; </span><br><span class="line">  sentence2;</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span>(expression3)&#123;</span><br><span class="line">  sentence3;</span><br><span class="line">&#125; ...</span><br></pre></td></tr></table></figure></p>
+<h2 id="matchPath-js"><a href="#matchPath-js" class="headerlink" title="matchPath.js"></a>matchPath.js</h2><p><code>matchPath(pathname, options = {})</code>返回match对象。用于计算match对象。<br>有使用到<code>path-to-regexp</code>库。<br><code>path-to-regexp</code>使用方法：<a href="https://github.com/pillarjs/path-to-regexp" target="_blank" rel="noopener">https://github.com/pillarjs/path-to-regexp</a><a href="https://npmjs.org/package/path-to-regexp" target="_blank" rel="noopener"><img src="https://camo.githubusercontent.com/e0b90b90518e04240605b28051ebca3d1157fac5/687474703a2f2f696d672e736869656c64732e696f2f6e706d2f646d2f706174682d746f2d7265676578702e7376673f7374796c653d666c6174" alt="Downloads" data-canonical-src="http://img.shields.io/npm/dm/path-to-regexp.svg?style=flat" style="max-width:100%;"></a></p>
+<ul>
+<li><code>path</code> An Express-style string, an array of strings, or a regular expression.</li>
+<li><code>keys</code> An array to be populated with the keys found in the path.</li>
+<li><code>options</code><ul>
+<li><code>sensitive</code> When true the route will be case sensitive. (default: false)</li>
+<li><code>strict</code> When false the trailing slash is optional. (default: false)</li>
+<li><code>end</code> When false the path will match at the beginning. (default: true)</li>
+<li><code>delimiter</code> Set the default delimiter for repeat parameters. (default: ‘/‘)<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> keys = []</span><br><span class="line"><span class="keyword">var</span> re = pathToRegexp(<span class="string">'/foo/:bar'</span>, keys)</span><br><span class="line"><span class="comment">// re = /^\/foo\/([^\/]+?)\/?$/i</span></span><br><span class="line"><span class="comment">// keys = [&#123; name: 'bar', prefix: '/', delimiter: '/', optional: false, repeat: false, pattern: '[^\\/]+?' &#125;]</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<p><code>RegExp.prototype.exec()</code>,返回结果result是一个数组，result[0]表示匹配的全部字符串，[1], …[n]括号中的分组捕获,index:    匹配到的字符位于原始字符串的基于0的索引值,input:原始字符串,<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/RegExp/exec" target="_blank" rel="noopener">mdn exec</a></p>
+<h1 id="Link"><a href="#Link" class="headerlink" title="Link"></a>Link</h1><p><code>Link</code>:作用是一个链接，点击链接触发<code>history.push</code>或者<code>history.replace</code>,会触发<code>Router</code>组件的<code>history.listen</code>添加的回调，调用<code>setState</code>触发组件更新，进一步<code>Route</code>组件重新匹配路由，渲染对应组件。</p>
+<p>modifier keys：ctrl，alt，metaKey，shift。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Link</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  <span class="keyword">static</span> propTypes = &#123;</span><br><span class="line">    onClick: PropTypes.func,</span><br><span class="line">    target: PropTypes.string,</span><br><span class="line">    replace: PropTypes.bool,</span><br><span class="line">    to: PropTypes.oneOfType([</span><br><span class="line">      PropTypes.string,</span><br><span class="line">      PropTypes.object</span><br><span class="line">    ]).isRequired</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">static</span> defaultProps = &#123;</span><br><span class="line">    replace: <span class="literal">false</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">static</span> contextTypes = &#123;</span><br><span class="line">    router: PropTypes.shape(&#123;</span><br><span class="line">      history: PropTypes.shape(&#123;</span><br><span class="line">        push: PropTypes.func.isRequired,</span><br><span class="line">        replace: PropTypes.func.isRequired,</span><br><span class="line">        createHref: PropTypes.func.isRequired</span><br><span class="line">      &#125;).isRequired</span><br><span class="line">    &#125;).isRequired</span><br><span class="line">  &#125;</span><br><span class="line">  handleClick = <span class="function">(<span class="params">event</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.props.onClick)</span><br><span class="line">      <span class="keyword">this</span>.props.onClick(event)</span><br><span class="line">    <span class="keyword">if</span> (</span><br><span class="line">      !event.defaultPrevented &amp;&amp; <span class="comment">// onClick prevented default</span></span><br><span class="line">      event.button === <span class="number">0</span> &amp;&amp; <span class="comment">// ignore right clicks</span></span><br><span class="line">      !<span class="keyword">this</span>.props.target &amp;&amp; <span class="comment">// let browser handle "target=_blank" etc.</span></span><br><span class="line">      !isModifiedEvent(event) <span class="comment">// ignore clicks with modifier keys</span></span><br><span class="line">    ) &#123;</span><br><span class="line">      event.preventDefault()<span class="comment">//阻止默认行为</span></span><br><span class="line">      <span class="keyword">const</span> &#123; history &#125; = <span class="keyword">this</span>.context.router</span><br><span class="line">      <span class="keyword">const</span> &#123; replace, to &#125; = <span class="keyword">this</span>.props</span><br><span class="line">      <span class="comment">//history对象更新，触发Router组件中的history.listen事件，调用setState，触发组件更新，Route组件会重新进行路由匹配。</span></span><br><span class="line">      <span class="keyword">if</span> (replace) &#123;</span><br><span class="line">        history.replace(to) </span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        history.push(to)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; replace, to, ...props &#125; = <span class="keyword">this</span>.props <span class="comment">// eslint-disable-line no-unused-vars</span></span><br><span class="line">  <span class="comment">//const createHref = (location) =&gt;basename + createPath(location)</span></span><br><span class="line">    <span class="keyword">const</span> href = <span class="keyword">this</span>.context.router.history.createHref(</span><br><span class="line">      <span class="keyword">typeof</span> to === <span class="string">'string'</span> ? &#123; <span class="attr">pathname</span>: to &#125; : to</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> &lt;a &#123;...props&#125; onClick=&#123;this.handleClick&#125; href=&#123;href&#125;/&gt;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">export default Link</span><br></pre></td></tr></table></figure>
+<h1 id="NavLink"><a href="#NavLink" class="headerlink" title="NavLink"></a>NavLink</h1><p><code>NavLink</code>:是对<code>Link</code>的封装，可以添加导航活动状态的样式。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> NavLink = (&#123;</span><br><span class="line">  to,</span><br><span class="line">  exact,</span><br><span class="line">  strict,</span><br><span class="line">  location,</span><br><span class="line">  activeClassName,</span><br><span class="line">  className,</span><br><span class="line">  activeStyle,</span><br><span class="line">  style,</span><br><span class="line">  isActive: getIsActive,</span><br><span class="line">  ...rest</span><br><span class="line">&#125;) =&gt; (</span><br><span class="line">  <span class="comment">//这里Route使用的是children进行渲染子组件，此时无论路由是否匹配，都会渲染Link.</span></span><br><span class="line">  <span class="comment">//注意Route的path和Link的to参数，只要Link别点击，该Route就会匹配，这时计算的match对象不为null,</span></span><br><span class="line">  <span class="comment">//match对象和location会被传入getIsActive函数，进行link是否active的判断，和进而重新渲染Link。</span></span><br><span class="line">  &lt;Route</span><br><span class="line">    path=&#123;<span class="keyword">typeof</span> to === <span class="string">'object'</span> ? to.pathname : to&#125;</span><br><span class="line">    exact=&#123;exact&#125;</span><br><span class="line">    strict=&#123;strict&#125;</span><br><span class="line">    location=&#123;location&#125;</span><br><span class="line">    children=&#123;(&#123; location, match &#125;) =&gt; &#123;</span><br><span class="line">      <span class="keyword">const</span> isActive = !!(getIsActive ? getIsActive(match, location) : match)</span><br><span class="line"></span><br><span class="line">      <span class="keyword">return</span> (</span><br><span class="line">        &lt;Link</span><br><span class="line">          to=&#123;to&#125;</span><br><span class="line">          className=&#123;isActive ? [ className, activeClassName ].filter(<span class="function"><span class="params">i</span> =&gt;</span> i).join(<span class="string">' '</span>) : className&#125;</span><br><span class="line">          style=&#123;isActive ? &#123; ...style, ...activeStyle &#125; : style&#125;</span><br><span class="line">          &#123;...rest&#125;</span><br><span class="line">        /&gt;</span><br><span class="line">      )</span><br><span class="line">    &#125;&#125;</span><br><span class="line">  /&gt;</span><br><span class="line">)</span><br><span class="line">NavLink.propTypes = &#123;</span><br><span class="line">  to: Link.propTypes.to,</span><br><span class="line">  exact: PropTypes.bool,</span><br><span class="line">  strict: PropTypes.bool,</span><br><span class="line">  location: PropTypes.object,</span><br><span class="line">  activeClassName: PropTypes.string,</span><br><span class="line">  className: PropTypes.string,</span><br><span class="line">  activeStyle: PropTypes.object,</span><br><span class="line">  style: PropTypes.object,</span><br><span class="line">  isActive: PropTypes.func</span><br><span class="line">&#125;</span><br><span class="line">NavLink.defaultProps = &#123;</span><br><span class="line">  activeClassName: <span class="string">'active'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>上面可以看出<code>NavLink</code>接受的props。接收<code>isActive</code>是一个函数,内部调用<code>getIsActive(match, location)</code>传入了<code>match</code>和<code>location</code>，让使用者来判定该链接是否为<code>active</code>状态,如果是<code>active</code>状态,会给链接添加使用者传入的样式。<br>可以像下面使用。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;NavLink </span><br><span class="line">  to=<span class="string">"/news"</span> </span><br><span class="line">  activeStyle=&#123;&#123;<span class="attr">fontSize</span>:<span class="string">'18px'</span>,<span class="attr">color</span>:<span class="string">'red'</span>&#125;&#125; </span><br><span class="line">  isActive=&#123;(match,location)=&gt;&#123;<span class="keyword">if</span>(match)<span class="keyword">return</span> <span class="literal">true</span>&#125;&#125;</span><br><span class="line"> &gt;News&lt;<span class="regexp">/NavLink&gt;</span></span><br></pre></td></tr></table></figure></p>
+<h1 id="Redirect"><a href="#Redirect" class="headerlink" title="Redirect"></a>Redirect</h1><p>重定向链接<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Redirect</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  <span class="keyword">static</span> propTypes = &#123;</span><br><span class="line">    push: PropTypes.bool, <span class="comment">//表示是否要使用history.push改变history。</span></span><br><span class="line">    <span class="keyword">from</span>: PropTypes.string,<span class="comment">//表示从指定路径跳转到目的路径（location）,与Switch配合使用。</span></span><br><span class="line">    to: PropTypes.oneOfType([</span><br><span class="line">      PropTypes.string,</span><br><span class="line">      PropTypes.object</span><br><span class="line">    ])</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">static</span> defaultProps = &#123;</span><br><span class="line">    push: <span class="literal">false</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">static</span> contextTypes = &#123;</span><br><span class="line">    router: PropTypes.shape(&#123;</span><br><span class="line">      history: PropTypes.shape(&#123;</span><br><span class="line">        push: PropTypes.func.isRequired,</span><br><span class="line">        replace: PropTypes.func.isRequired</span><br><span class="line">      &#125;).isRequired,</span><br><span class="line">      staticContext: PropTypes.object</span><br><span class="line">    &#125;).isRequired</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  isStatic() &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.context.router &amp;&amp; <span class="keyword">this</span>.context.router.staticContext</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  componentWillMount() &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.isStatic())</span><br><span class="line">      <span class="keyword">this</span>.perform()</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  componentDidMount() &#123;</span><br><span class="line">    <span class="keyword">if</span> (!<span class="keyword">this</span>.isStatic())</span><br><span class="line">      <span class="keyword">this</span>.perform()</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  perform() &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; history &#125; = <span class="keyword">this</span>.context.router</span><br><span class="line">    <span class="keyword">const</span> &#123; push, to &#125; = <span class="keyword">this</span>.props</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (push) &#123;</span><br><span class="line">      history.push(to)</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      history.replace(to)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">null</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="Switch"><a href="#Switch" class="headerlink" title="Switch"></a>Switch</h1><p><code>&lt;Switch&gt;</code>的所有孩子应该是<code>&lt;Route&gt;</code>或者<code>&lt;Redirect&gt;</code>。只有第一个匹配当前location的孩子会被渲染。</p>
+<p><code>&lt;Route&gt;</code>使用<code>path</code>属性进行匹配，<code>&lt;Redirect&gt;</code>使用<code>from</code>属性进行匹配。如果<code>&lt;Route&gt;</code>没有<code>path</code>属性<br>或者<code>&lt;Redirect&gt;</code>没有<code>from</code>属性则总是匹配当前的location（与<code>history.location.pathname</code>比较）。</p>
+<p>当 <code>&lt;Switch&gt;</code>包含一个<code>&lt;Redirect&gt;</code>时，这个<code>&lt;Redirect&gt;</code>像<code>&lt;Route&gt;</code>一样，可以设置的props增加了<code>path</code>、<code>exact</code>、<code>strict</code>，这些都会起作用，如果没有设置<code>path</code>,属性中的<code>from</code>,当做<code>path</code>使用。具体实现，代码如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * The public API for rendering the first &lt;Route&gt; that matches.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Switch</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  <span class="keyword">static</span> contextTypes = &#123;</span><br><span class="line">    router: PropTypes.shape(&#123;</span><br><span class="line">      route: PropTypes.object.isRequired</span><br><span class="line">    &#125;).isRequired</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">static</span> propTypes = &#123;</span><br><span class="line">    children: PropTypes.node,</span><br><span class="line">    location: PropTypes.object</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  componentWillReceiveProps(nextProps) &#123;</span><br><span class="line">    warning(</span><br><span class="line">      !(nextProps.location &amp;&amp; !<span class="keyword">this</span>.props.location),</span><br><span class="line">      <span class="string">'&lt;Switch&gt; elements should not change from uncontrolled to controlled (or vice versa). You initially used no "location" prop and then provided one on a subsequent render.'</span></span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    warning(</span><br><span class="line">      !(!nextProps.location &amp;&amp; <span class="keyword">this</span>.props.location),</span><br><span class="line">      <span class="string">'&lt;Switch&gt; elements should not change from controlled to uncontrolled (or vice versa). You provided a "location" prop initially but omitted it on a subsequent render.'</span></span><br><span class="line">    )</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; route &#125; = <span class="keyword">this</span>.context.router</span><br><span class="line">    <span class="keyword">const</span> &#123; children &#125; = <span class="keyword">this</span>.props</span><br><span class="line">    <span class="keyword">const</span> location = <span class="keyword">this</span>.props.location || route.location</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> match, child</span><br><span class="line">    React.Children.forEach(children, element =&gt; &#123;</span><br><span class="line">      <span class="keyword">if</span> (!React.isValidElement(element)) <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">      <span class="keyword">const</span> &#123; <span class="attr">path</span>: pathProp, exact, strict, <span class="keyword">from</span> &#125; = element.props</span><br><span class="line">      <span class="keyword">const</span> path = pathProp || <span class="keyword">from</span> <span class="comment">//&lt;Redirect from='/old-path' to='/new-path'/&gt;,只有指定路径（from）才跳转到to。</span></span><br><span class="line">      <span class="comment">//这里限制了渲染第一个匹配路由的Route或者Redirect。</span></span><br><span class="line">      <span class="keyword">if</span> (match == <span class="literal">null</span>) &#123;</span><br><span class="line">        child = element</span><br><span class="line">        match = path ? matchPath(location.pathname, &#123; path, exact, strict &#125;) : route.match</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="comment">//这里的cloneElement传入&#123; location, computedMatch: match &#125;是为&lt;Route&gt;使用的，对&lt;Redirect&gt;并不起作用。</span></span><br><span class="line">    <span class="keyword">return</span> match ? React.cloneElement(child, &#123; location, <span class="attr">computedMatch</span>: match &#125;) : <span class="literal">null</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="Prompt"><a href="#Prompt" class="headerlink" title="Prompt"></a>Prompt</h1><p>在一个组件内使用，当该组件要被卸载的时候会被调用，即导航到别处的时候会询问是否离开。<br>发下了一个问题：当离开的时候点击的否，不会刷新页面，但是在点击当前导航的时候，还会发出同样的询问，不知是否正常。<br>基本原因：通过<code>&lt;Prompt&gt;</code>设置了提示信息是全局的，只要没有取消提示信息，点击<code>&lt;Link&gt;</code>组件都会触发提示。<br>只有切换到其它导航，<code>&lt;Prompt&gt;</code>被卸载，设置的提示信息被取消，其它导航间切换不会有提示。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * The public API for prompting the user before navigating away</span></span><br><span class="line"><span class="comment"> * from a screen with a component.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Prompt</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  <span class="keyword">static</span> propTypes = &#123;</span><br><span class="line">    when: PropTypes.bool,</span><br><span class="line">    message: PropTypes.oneOfType([</span><br><span class="line">      PropTypes.func,</span><br><span class="line">      PropTypes.string</span><br><span class="line">    ]).isRequired</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">static</span> defaultProps = &#123;</span><br><span class="line">    when: <span class="literal">true</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">static</span> contextTypes = &#123;</span><br><span class="line">    router: PropTypes.shape(&#123;</span><br><span class="line">      history: PropTypes.shape(&#123;</span><br><span class="line">        block: PropTypes.func.isRequired</span><br><span class="line">      &#125;).isRequired</span><br><span class="line">    &#125;).isRequired</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  enable(message) &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.unblock)</span><br><span class="line">      <span class="keyword">this</span>.unblock()</span><br><span class="line">      <span class="comment">//history.block(message)添加导航切换的提示信息，返回取消提示的方法。</span></span><br><span class="line">    <span class="keyword">this</span>.unblock = <span class="keyword">this</span>.context.router.history.block(message)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  disable() &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.unblock) &#123;</span><br><span class="line">      <span class="comment">//取消导航切换提示。</span></span><br><span class="line">      <span class="keyword">this</span>.unblock()</span><br><span class="line">      <span class="keyword">this</span>.unblock = <span class="literal">null</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">//当&lt;Prompt&gt;挂载的时候，设置导航切换前提示。</span></span><br><span class="line">  componentWillMount() &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.props.when)</span><br><span class="line">      <span class="keyword">this</span>.enable(<span class="keyword">this</span>.props.message)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  componentWillReceiveProps(nextProps) &#123;</span><br><span class="line">    <span class="keyword">if</span> (nextProps.when) &#123;</span><br><span class="line">      <span class="keyword">if</span> (!<span class="keyword">this</span>.props.when || <span class="keyword">this</span>.props.message !== nextProps.message)</span><br><span class="line">        <span class="keyword">this</span>.enable(nextProps.message)</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">this</span>.disable()</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">//当&lt;Prompt&gt;卸载的时候,取消导航切换提示。</span></span><br><span class="line">  componentWillUnmount() &#123;</span><br><span class="line">    <span class="keyword">this</span>.disable()</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">null</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>从<code>&lt;Prompt&gt;</code>设计可以看出，在<code>&lt;Prompt&gt;</code>将要挂载的时候调用了<code>history.block(message)</code>，这个操作使得在调用<code>history.push</code>或者<code>history.replace</code>（<code>&lt;Link&gt;</code>）的时候，改变浏览器本地location和history之前，会进行切换导航前的提示。<br>具体实现参见<code>history</code><a href="https://github.com/ReactTraining/history/blob/master/modules/createBrowserHistory.js#L267" target="_blank" rel="noopener">block</a><br><code>&lt;BrowserRouter&gt;</code>有个props是<code>getUserConfirmation</code>,它是<code>createHistory</code>暴露给用户的接口，可让用户可以自定义转移确认行为。<br>转移确认默认的行为是<code>history</code>库内部的<a href="https://github.com/ReactTraining/history/blob/master/modules/DOMUtils.js#L15" target="_blank" rel="noopener">getConfirmation</a>：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> getConfirmation = <span class="function">(<span class="params">message, callback</span>) =&gt;</span></span><br><span class="line">  callback(<span class="built_in">window</span>.confirm(message))</span><br></pre></td></tr></table></figure></p>
+<h1 id="withRouter"><a href="#withRouter" class="headerlink" title="withRouter"></a>withRouter</h1><p>高阶组件。使用<code>withRouter</code>包裹的<code>Component</code>,每一次路由改变<code>Component</code>都会重新渲染。是因为<code>&lt;Route&gt;</code>渲染了属性：<code>{match,location,history}</code>。就像React-Redux的connect函数。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * A public higher-order component to access the imperative API</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">const</span> withRouter = <span class="function">(<span class="params">Component</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> C = <span class="function">(<span class="params">props</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; wrappedComponentRef, ...remainingProps &#125; = props</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;Route render=&#123;routeComponentProps =&gt; (</span><br><span class="line">        &lt;Component &#123;...remainingProps&#125; &#123;...routeComponentProps&#125; ref=&#123;wrappedComponentRef&#125;/&gt;</span><br><span class="line">      )&#125;/&gt;</span><br><span class="line">    )</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  C.displayName = <span class="string">`withRouter(<span class="subst">$&#123;Component.displayName || Component.name&#125;</span>)`</span></span><br><span class="line">  C.WrappedComponent = Component</span><br><span class="line">  C.propTypes = &#123;</span><br><span class="line">    wrappedComponentRef: PropTypes.func</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> hoistStatics(C, Component) <span class="comment">//该方法的作用是除了特殊属性外将Component上属性复制到C上。</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="HashRouter"><a href="#HashRouter" class="headerlink" title="HashRouter"></a>HashRouter</h1><p>使用了<code>history/createHashHistory</code>。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> createHistory <span class="keyword">from</span> <span class="string">'history/createHashHistory'</span></span><br><span class="line"><span class="keyword">import</span> &#123; Router &#125; <span class="keyword">from</span> <span class="string">'react-router'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * The public API for a &lt;Router&gt; that uses window.location.hash.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HashRouter</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  <span class="keyword">static</span> propTypes = &#123;</span><br><span class="line">    basename: PropTypes.string,</span><br><span class="line">    getUserConfirmation: PropTypes.func,</span><br><span class="line">    hashType: PropTypes.oneOf([ <span class="string">'hashbang'</span>, <span class="string">'noslash'</span>, <span class="string">'slash'</span> ]),</span><br><span class="line">    children: PropTypes.node</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  history = createHistory(<span class="keyword">this</span>.props)</span><br><span class="line"></span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">return</span> &lt;Router history=&#123;this.history&#125; children=&#123;this.props.children&#125;/&gt;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="StaticRouter"><a href="#StaticRouter" class="headerlink" title="StaticRouter"></a>StaticRouter</h1><p>用途：服务器端渲染。<br>用户在浏览器地址栏输入要访问的地址回车后，向服务器发出请求，服务器根据url进行解析。<br>但是服务器要能正确判断，请求的url是前端路由，还是请求的其它静态资源。<br>判断是前端路由后，执行服务器端渲染。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ReactDOMServer.renderToString(</span><br><span class="line">    &lt;StaticRouter location=&#123;req.url&#125; context=&#123;context&#125;&gt;</span><br><span class="line">      &lt;App/&gt;</span><br><span class="line">    &lt;<span class="regexp">/StaticRouter&gt;</span></span><br><span class="line"><span class="regexp">  )</span></span><br></pre></td></tr></table></figure></p>
+<p>在服务器端不会有用户点击<code>&lt;Link&gt;</code>以及前进后退。但是可能会有<code>&lt;Redirect&gt;</code>或者其它组件在<code>componentWillMount</code>中操作<code>history.push</code>或者<code>history.replace</code>。这样会改变<code>location</code>。要想渲染出想要的结果，服务器端会向浏览器发出重定向请求，这样浏览器会发送新的url请求,然后服务器端再次做出相应。<br>服务器如何才能发送正确的重定向请求呢？就是使用一个<code>staticContext</code>对象进行记录，就是传入<code>&lt;StaticRouter&gt;</code>的<code>context</code>对象。<br>在服务器端渲染完成后，这个对象只会记录，最后一次的<code>location</code>信息。<br>具体实现如下：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; addLeadingSlash, createPath, parsePath &#125; <span class="keyword">from</span> <span class="string">'history/PathUtils'</span></span><br><span class="line"><span class="keyword">import</span> Router <span class="keyword">from</span> <span class="string">'./Router'</span></span><br><span class="line"><span class="comment">//规范化location</span></span><br><span class="line"><span class="keyword">const</span> normalizeLocation = <span class="function">(<span class="params">object</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> &#123; pathname = <span class="string">'/'</span>, search = <span class="string">''</span>, hash = <span class="string">''</span> &#125; = object</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    pathname,</span><br><span class="line">    search: search === <span class="string">'?'</span> ? <span class="string">''</span> : search,</span><br><span class="line">    hash: hash === <span class="string">'#'</span> ? <span class="string">''</span> : hash</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//添加basename</span></span><br><span class="line"><span class="keyword">const</span> addBasename = <span class="function">(<span class="params">basename, location</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (!basename)</span><br><span class="line">    <span class="keyword">return</span> location</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    ...location,</span><br><span class="line">    pathname: addLeadingSlash(basename) + location.pathname</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//剥离basename</span></span><br><span class="line"><span class="keyword">const</span> stripBasename = <span class="function">(<span class="params">basename, location</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (!basename)</span><br><span class="line">    <span class="keyword">return</span> location</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> base = addLeadingSlash(basename)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (location.pathname.indexOf(base) !== <span class="number">0</span>)</span><br><span class="line">    <span class="keyword">return</span> location</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    ...location,</span><br><span class="line">    pathname: location.pathname.substr(base.length)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//创建location</span></span><br><span class="line"><span class="keyword">const</span> createLocation = <span class="function">(<span class="params">location</span>) =&gt;</span></span><br><span class="line">  <span class="keyword">typeof</span> location === <span class="string">'string'</span> ? parsePath(location) : normalizeLocation(location)</span><br><span class="line"><span class="comment">//创建URL，pathname+search+hash</span></span><br><span class="line"><span class="keyword">const</span> createURL = <span class="function">(<span class="params">location</span>) =&gt;</span></span><br><span class="line">  <span class="keyword">typeof</span> location === <span class="string">'string'</span> ? location : createPath(location)</span><br><span class="line"><span class="comment">//一些方法不能再StaticRouter中设置。</span></span><br><span class="line"><span class="keyword">const</span> staticHandler = <span class="function">(<span class="params">methodName</span>) =&gt;</span> () =&gt; &#123;</span><br><span class="line">  invariant(</span><br><span class="line">    <span class="literal">false</span>,</span><br><span class="line">    <span class="string">'You cannot %s with &lt;StaticRouter&gt;'</span>,</span><br><span class="line">    methodName</span><br><span class="line">  )</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//空方法</span></span><br><span class="line"><span class="keyword">const</span> noop = <span class="function"><span class="params">()</span> =&gt;</span> &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * The public top-level API for a "static" &lt;Router&gt;, so-called because it</span></span><br><span class="line"><span class="comment"> * can't actually change the current location. Instead, it just records</span></span><br><span class="line"><span class="comment"> * location changes in a context object. Useful mainly in testing and</span></span><br><span class="line"><span class="comment"> * server-rendering scenarios.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">StaticRouter</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  <span class="keyword">static</span> propTypes = &#123;</span><br><span class="line">    basename: PropTypes.string,</span><br><span class="line">    context: PropTypes.object.isRequired,</span><br><span class="line">    location: PropTypes.oneOfType([</span><br><span class="line">      PropTypes.string,</span><br><span class="line">      PropTypes.object</span><br><span class="line">    ])</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">static</span> defaultProps = &#123;</span><br><span class="line">    basename: <span class="string">''</span>,</span><br><span class="line">    location: <span class="string">'/'</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">static</span> childContextTypes = &#123;</span><br><span class="line">    router: PropTypes.object.isRequired</span><br><span class="line">  &#125;</span><br><span class="line"><span class="comment">//&lt;StaticRouter&gt;通过context向&lt;Router&gt;传递数据。向&lt;BrowserRouter&gt;、&lt;HashRouter&gt;、&lt;MemoryRouter&gt;都没有这样的操作。</span></span><br><span class="line"><span class="comment">//主要还是因为服务器端渲染的需要。</span></span><br><span class="line">  getChildContext() &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      router: &#123;</span><br><span class="line">        staticContext: <span class="keyword">this</span>.props.context</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"> <span class="comment">//使用箭头函数，绑定this对象。因为history对象会向子组件传递，要使得这里的this可以正确访问this.props。</span></span><br><span class="line">  createHref = <span class="function">(<span class="params">path</span>) =&gt;</span></span><br><span class="line">    addLeadingSlash(<span class="keyword">this</span>.props.basename + createURL(path))</span><br><span class="line"><span class="comment">//这里是history.push方法</span></span><br><span class="line">  handlePush = <span class="function">(<span class="params">location</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; basename, context &#125; = <span class="keyword">this</span>.props</span><br><span class="line">    context.action = <span class="string">'PUSH'</span></span><br><span class="line">    context.location = addBasename(basename, createLocation(location))</span><br><span class="line">    context.url = createURL(context.location)</span><br><span class="line">  &#125;</span><br><span class="line"><span class="comment">//这里是history.replace方法。可以看出这里的push和replace方法都是设置this.props.context对象。可以根据context.url判断是否需要重定向。</span></span><br><span class="line">  handleReplace = <span class="function">(<span class="params">location</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; basename, context &#125; = <span class="keyword">this</span>.props</span><br><span class="line">    context.action = <span class="string">'REPLACE'</span></span><br><span class="line">    context.location = addBasename(basename, createLocation(location))</span><br><span class="line">    context.url = createURL(context.location)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  handleListen = <span class="function"><span class="params">()</span> =&gt;</span></span><br><span class="line">    noop</span><br><span class="line"></span><br><span class="line">  handleBlock = <span class="function"><span class="params">()</span> =&gt;</span></span><br><span class="line">    noop</span><br><span class="line"></span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; basename, context, location, ...props &#125; = <span class="keyword">this</span>.props</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> history = &#123;</span><br><span class="line">      createHref: <span class="keyword">this</span>.createHref,</span><br><span class="line">      action: <span class="string">'POP'</span>,</span><br><span class="line">      location: stripBasename(basename, createLocation(location)),</span><br><span class="line">      push: <span class="keyword">this</span>.handlePush,</span><br><span class="line">      replace: <span class="keyword">this</span>.handleReplace,</span><br><span class="line">      go: staticHandler(<span class="string">'go'</span>),<span class="comment">//使用StaticRoute不可以使用go，goBack，goForward方法。</span></span><br><span class="line">      goBack: staticHandler(<span class="string">'goBack'</span>),</span><br><span class="line">      goForward: staticHandler(<span class="string">'goForward'</span>),</span><br><span class="line">      listen: <span class="keyword">this</span>.handleListen, <span class="comment">//listen和block都是空方法</span></span><br><span class="line">      block: <span class="keyword">this</span>.handleBlock</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> &lt;Router &#123;...props&#125; history=&#123;history&#125;/&gt;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在测试服务器端渲染的时候发现了一个问题。<br>路由问题，如果静态资源使用了相对路径，静态资源访问出错。比如访问：<code>http://localhost:3000/topics/aaa</code>,<br>topics是设置的前端路由，这时加载相对路径的静态资源比如<code>./static/js/main.d23df278.js</code>,<br>客户端向服务器请求是路径会解析成<code>http://localhost:3000/topics/static/js/main.d23df278.js</code>,<br>这时就不能请求到正确的文件。要是使用绝对路径，就没有这个问题了。<code>/static/js/main.d23df278.js</code><br>会被解析成相对网站根目录的<code>http://localhost:3000/static/js/main.d23df278.js</code>。</p>
+<h1 id="MemoryRouter"><a href="#MemoryRouter" class="headerlink" title="MemoryRouter"></a>MemoryRouter</h1><p>在内存中保存history（不从地址栏读取，不向地址栏写入）。用途：测试，native环境。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">'react'</span></span><br><span class="line"><span class="keyword">import</span> PropTypes <span class="keyword">from</span> <span class="string">'prop-types'</span></span><br><span class="line"><span class="keyword">import</span> createHistory <span class="keyword">from</span> <span class="string">'history/createMemoryHistory'</span></span><br><span class="line"><span class="keyword">import</span> Router <span class="keyword">from</span> <span class="string">'./Router'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * The public API for a &lt;Router&gt; that stores location in memory.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MemoryRouter</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  <span class="keyword">static</span> propTypes = &#123;</span><br><span class="line">    initialEntries: PropTypes.array,</span><br><span class="line">    initialIndex: PropTypes.number,</span><br><span class="line">    getUserConfirmation: PropTypes.func,</span><br><span class="line">    keyLength: PropTypes.number,</span><br><span class="line">    children: PropTypes.node</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  history = createHistory(<span class="keyword">this</span>.props)</span><br><span class="line"></span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">return</span> &lt;Router history=&#123;this.history&#125; children=&#123;this.props.children&#125;/&gt;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">export default MemoryRouter</span><br></pre></td></tr></table></figure></p>
+<p>上面可以看出，<code>&lt;MemoryRouter&gt;</code>使用<code>createMemoryHistory</code>构造的<code>history</code>，其它都一样，只有这么多。具体怎么实现要看<code>history</code>库的实现了。<br><code>createMemoryHistory</code>返回的<code>history</code>对象结构：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> history = &#123;</span><br><span class="line">    length: entries.length,</span><br><span class="line">    action: <span class="string">'POP'</span>,</span><br><span class="line">    location: entries[index],</span><br><span class="line">    index,  <span class="comment">//当前location索引。</span></span><br><span class="line">    entries,<span class="comment">//保存location信息的数组即history信息。</span></span><br><span class="line">    createHref,</span><br><span class="line">    push,</span><br><span class="line">    replace,</span><br><span class="line">    go,</span><br><span class="line">    goBack,</span><br><span class="line">    goForward,</span><br><span class="line">    canGo,</span><br><span class="line">    block,</span><br><span class="line">    listen</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
+<p><code>createBrowserHistory</code>返回的<code>history</code>对象结构：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> history = &#123;</span><br><span class="line">    length: globalHistory.length,</span><br><span class="line">    action: <span class="string">'POP'</span>,</span><br><span class="line">    location: initialLocation,</span><br><span class="line">    createHref,</span><br><span class="line">    push,</span><br><span class="line">    replace,</span><br><span class="line">    go,</span><br><span class="line">    goBack,</span><br><span class="line">    goForward,</span><br><span class="line">    block,</span><br><span class="line">    listen</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p><code>react-router</code>机制：当URL更改时，它被<code>History</code> API的状态机制拦截，然后重新渲染整个视图。<br>react-router v4 中所有的控制都是通过组件形式。<br>在v4以前的版本中，称为静态路由，是通过配置的形式控制路由，路由和组件是分离的；<br>v4称为动态路由，在app的渲染过程中，动态的匹配路由，组件和路由可以嵌套使用。<br>没有看过v4以前的源码，只是使用过v3，因此不能进行深入的对比。<br>react-router源码并不多，设计的很精巧。<br><code>history</code>是<code>react-router</code>的重要依赖，想要更加深刻的理解，必须要对<code>history</code>有足够的认识。<br>有时间再系统的分析一下<code>history</code>源码。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/react-router/" rel="tag"># react-router</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/10/react-analysis总结/" rel="next" title="react-analysis总结">
+                <i class="fa fa-chevron-left"></i> react-analysis总结
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/06/25/连续发送ajax/" rel="prev" title="连续发送ajax">
+                连续发送ajax <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div class="ds-thread" data-thread-key="2017/06/17/react-router-analysis/"
+           data-title="react-router-analysis" data-url="http://fsysfq.top/2017/06/17/react-router-analysis/">
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">石富全</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">26</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/sivkun" target="_blank" title="myGitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>myGitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://fex.baidu.com" target="_blank" title="百度FEX">
+                      
+                        <i class="fa fa-fw fa-fex.baidu"></i>百度FEX</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://taobaofed.org" target="_blank" title="淘宝FED">
+                      
+                        <i class="fa fa-fw fa-taobaofed"></i>淘宝FED</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://www.alloyteam.com/" target="_blank" title="alloyteam">
+                      
+                        <i class="fa fa-fw fa-alloyteam"></i>alloyteam</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://www.cnblogs.com/sivkun/" target="_blank" title="我的博客园">
+                      
+                        <i class="fa fa-fw fa-cnblogs"></i>我的博客园</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#history"><span class="nav-number">1.</span> <span class="nav-text">history</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#createHistory-props"><span class="nav-number">1.1.</span> <span class="nav-text">createHistory(props={})</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#BrowserRouter"><span class="nav-number">2.</span> <span class="nav-text">BrowserRouter</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Router"><span class="nav-number">3.</span> <span class="nav-text">Router</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Route"><span class="nav-number">4.</span> <span class="nav-text">Route</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#matchPath-js"><span class="nav-number">4.1.</span> <span class="nav-text">matchPath.js</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Link"><span class="nav-number">5.</span> <span class="nav-text">Link</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#NavLink"><span class="nav-number">6.</span> <span class="nav-text">NavLink</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Redirect"><span class="nav-number">7.</span> <span class="nav-text">Redirect</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Switch"><span class="nav-number">8.</span> <span class="nav-text">Switch</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Prompt"><span class="nav-number">9.</span> <span class="nav-text">Prompt</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#withRouter"><span class="nav-number">10.</span> <span class="nav-text">withRouter</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HashRouter"><span class="nav-number">11.</span> <span class="nav-text">HashRouter</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#StaticRouter"><span class="nav-number">12.</span> <span class="nav-text">StaticRouter</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MemoryRouter"><span class="nav-number">13.</span> <span class="nav-text">MemoryRouter</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">14.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">石富全</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"discussinfo"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
